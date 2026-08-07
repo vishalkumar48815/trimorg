@@ -1,0 +1,41 @@
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import prettierConfig from 'eslint-config-prettier';
+import globals from 'globals';
+
+export default tseslint.config(
+  {
+    ignores: ['**/dist/**', '**/coverage/**', '**/node_modules/**'],
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+
+  // apps/web — React SPA
+  {
+    files: ['apps/web/src/**/*.{ts,tsx}'],
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    languageOptions: {
+      globals: globals.browser,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    },
+  },
+
+  // apps/api — NestJS backend
+  {
+    files: ['apps/api/src/**/*.ts', 'apps/api/test/**/*.ts'],
+    languageOptions: {
+      globals: { ...globals.node, ...globals.jest },
+      sourceType: 'commonjs',
+    },
+  },
+
+  prettierConfig,
+);

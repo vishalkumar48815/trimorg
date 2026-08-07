@@ -4,7 +4,21 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>web</title>
+    <title>Trimorg</title>
+    <script>
+      // Applied before first paint to avoid a light/dark flash on load — kept in
+      // sync with theme/theme-provider.tsx, which owns this logic after mount.
+      (function () {
+        try {
+          var stored = localStorage.getItem('trimorg-theme-preference');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = stored === 'dark' || (stored !== 'light' && prefersDark);
+          if (isDark) document.documentElement.classList.add('dark');
+        } catch (error) {
+          // localStorage may be unavailable (e.g. privacy mode); fall back to light.
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,12 +1,157 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/* Enables the `dark:` variant to activate from a `.dark` class instead of OS preference,
+   so ThemeProvider can override the system default per DesignSystem.md §11. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   color-scheme: light dark;
+
+  /* Neutral scale — DesignSystem.md §1. Cool gray, never pure black/white. */
+  --neutral-0: #ffffff;
+  --neutral-50: #fafafa;
+  --neutral-100: #f4f4f5;
+  --neutral-200: #e4e4e7;
+  --neutral-300: #d4d4d8;
+  --neutral-400: #a1a1aa;
+  --neutral-500: #71717a;
+  --neutral-600: #52525b;
+  --neutral-700: #3f3f46;
+  --neutral-800: #27272a;
+  --neutral-900: #18181b;
+  --neutral-950: #0f0f11;
+
+  /* Brand accent — PLACEHOLDER per DesignSystem.md, swap when brand identity is finalized. */
+  --brand-accent: #3949ab;
+  --brand-accent-foreground: #ffffff;
+
+  /* Semantic colors — desaturated per DesignSystem.md §1, used for status only. */
+  --semantic-success: #4d9a6a;
+  --semantic-warning: #b8862f;
+  --semantic-danger: #c04a4a;
+  --semantic-info: #3b6fb0;
+
+  /* Role tokens — light mode. Components consume these, never the raw scale above. */
+  --background: var(--neutral-50);
+  --foreground: var(--neutral-950);
+  --card: var(--neutral-0);
+  --card-foreground: var(--neutral-950);
+  --popover: var(--neutral-0);
+  --popover-foreground: var(--neutral-950);
+  --primary: var(--brand-accent);
+  --primary-foreground: var(--brand-accent-foreground);
+  --secondary: var(--neutral-100);
+  --secondary-foreground: var(--neutral-900);
+  --muted: var(--neutral-100);
+  --muted-foreground: var(--neutral-500);
+  --accent: var(--neutral-100);
+  --accent-foreground: var(--neutral-900);
+  --destructive: var(--semantic-danger);
+  --destructive-foreground: var(--neutral-0);
+  --success: var(--semantic-success);
+  --warning: var(--semantic-warning);
+  --info: var(--semantic-info);
+  --border: var(--neutral-200);
+  --input: var(--neutral-200);
+  --ring: var(--brand-accent);
+
+  /* Radius scale — DesignSystem.md §4. Subtle, not heavily rounded. */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+
+  /* Shadow scale — DesignSystem.md §5. Three levels only, soft and low-opacity. */
+  --shadow-raised: 0 2px 8px -2px rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-overlay: 0 12px 32px -8px rgb(0 0 0 / 0.14), 0 4px 8px -2px rgb(0 0 0 / 0.08);
+}
+
+.dark {
+  /* Dark surface is a dark neutral, never pure black — DesignSystem.md §11. */
+  --background: var(--neutral-950);
+  --foreground: var(--neutral-50);
+  --card: var(--neutral-900);
+  --card-foreground: var(--neutral-50);
+  --popover: var(--neutral-900);
+  --popover-foreground: var(--neutral-50);
+  --primary: var(--brand-accent);
+  --primary-foreground: var(--brand-accent-foreground);
+  --secondary: var(--neutral-800);
+  --secondary-foreground: var(--neutral-50);
+  --muted: var(--neutral-800);
+  --muted-foreground: var(--neutral-400);
+  /* Elevation in dark mode is a lighter surface tone, not a shadow — DesignSystem.md §11. */
+  --accent: var(--neutral-800);
+  --accent-foreground: var(--neutral-50);
+  --destructive: var(--semantic-danger);
+  --destructive-foreground: var(--neutral-0);
+  --success: var(--semantic-success);
+  --warning: var(--semantic-warning);
+  --info: var(--semantic-info);
+  --border: var(--neutral-800);
+  --input: var(--neutral-800);
+  --ring: var(--brand-accent);
+  --shadow-raised: 0 2px 8px -2px rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --shadow-overlay: 0 12px 32px -8px rgb(0 0 0 / 0.5), 0 4px 8px -2px rgb(0 0 0 / 0.35);
+}
+
+@theme inline {
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+
+  --shadow-raised: var(--shadow-raised);
+  --shadow-overlay: var(--shadow-overlay);
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+/* Global reduced-motion override — DesignSystem.md §10 requires this with no exceptions.
+   Catches shadcn/Radix's generated animate-in/animate-out classes too, not just our own
+   transitions, without needing a motion-reduce: variant on every individual component. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

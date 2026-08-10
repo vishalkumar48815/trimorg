@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  STAFF
+}
+
+enum OrganizationStatus {
+  DRAFT
+  ACTIVE
+}
+
+model User {
+  id                         String      @id @default(cuid())
+  email                      String      @unique
+  fullName                   String
+  mobile                     String
+  passwordHash               String
+  role                       UserRole    @default(OWNER)
+  isEmailVerified            Boolean     @default(false)
+  emailVerificationTokenHash String?
+  emailVerificationExpiresAt  DateTime?
+  passwordResetTokenHash     String?
+  passwordResetExpiresAt     DateTime?
+  refreshTokenHash           String?
+  refreshTokenExpiresAt      DateTime?
+  onboardingCompletedAt      DateTime?
+  organizationId             String?     @unique
+  organization               Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  createdAt                  DateTime    @default(now())
+  updatedAt                  DateTime    @updatedAt
+}
+
+model PendingSignup {
+  id                         String   @id @default(cuid())
+  email                      String   @unique
+  fullName                   String
+  businessName               String
+  mobile                     String
+  passwordHash               String
+  emailVerificationTokenHash String
+  emailVerificationExpiresAt  DateTime
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+}
+
+model Organization {
+  id                     String             @id @default(cuid())
+  businessName           String
+  businessType           String
+  ownerName              String
+  mobile                 String
+  gst                    String?
+  addressLine1           String?
+  addressLine2           String?
+  city                   String?
+  state                  String?
+  postalCode             String?
+  country                String?
+  currencyCode           String?
+  timezone               String?
+  financialYearStartMonth Int?
+  logoUrl                String?
+  logoMimeType           String?
+  logoFileName           String?
+  status                 OrganizationStatus @default(DRAFT)
+  onboardingCompletedAt   DateTime?
+  user                   User?
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+}

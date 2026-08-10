@@ -57,3 +57,6 @@ Thumbs.db
 *.seed
 *.pid.lock
 .eslintcache
+
+# ---------- Local tooling ----------
+.claude/

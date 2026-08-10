@@ -15,11 +15,12 @@ export interface OrganizationStepInput {
 }
 
 export interface AddressStepInput {
-  businessAddress: string;
+  addressLine1: string;
+  addressLine2?: string;
   country: string;
   state: string;
   city: string;
-  pincode: string;
+  postalCode: string;
 }
 
 export interface PreferencesStepInput {

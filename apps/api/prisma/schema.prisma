@@ -73,7 +73,23 @@ model Organization {
   logoFileName           String?
   status                 OrganizationStatus @default(DRAFT)
   onboardingCompletedAt   DateTime?
-  user                   User?
+  user                    User?
+  products                Product[]
   createdAt              DateTime           @default(now())
   updatedAt              DateTime           @updatedAt
+}
+
+model Product {
+  id            String       @id @default(cuid())
+  organizationId String
+  name          String
+  sku           String
+  category      String
+  sellingPrice  Decimal      @db.Decimal(12, 2)
+  status        String       @default("ACTIVE")
+  organization  Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@unique([organizationId, sku])
 }

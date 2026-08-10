@@ -165,15 +165,31 @@ export class OnboardingService {
   async saveAddressStep(userId: string, input: AddressStepInput): Promise<OnboardingStatus> {
     const organization = await this.requireOrganization(userId);
 
+    await this.prisma.organization.update({
+      where: { id: organization.id },
+      data: {
+        addressLine1: input.addressLine1,
+        addressLine2: input.addressLine2 && input.addressLine2.length > 0 ? input.addressLine2 : null,
+        city: input.city,
+        state: input.state,
+        postalCode: input.postalCode,
+        country: input.country,
+      },
+    });
+
+    return this.buildStatus(userId);
+  }
+
+  async savePreferencesStep(userId: string, input: PreferencesStepInput): Promise<OnboardingStatus> {
+    const organization = await this.requireOrganization(userId);
+
     await this.prisma.$transaction([
       this.prisma.organization.update({
         where: { id: organization.id },
         data: {
-          addressLine1: input.businessAddress,
-          city: input.city,
-          state: input.state,
-          postalCode: input.pincode,
-          country: input.country,
+          currencyCode: input.currencyCode,
+          timezone: input.timezone,
+          financialYearStartMonth: input.financialYearStartMonth,
           status: OrganizationStatus.ACTIVE,
           onboardingCompletedAt: new Date(),
         },
@@ -185,21 +201,6 @@ export class OnboardingService {
         },
       }),
     ]);
-
-    return this.buildStatus(userId);
-  }
-
-  async savePreferencesStep(userId: string, input: PreferencesStepInput): Promise<OnboardingStatus> {
-    const organization = await this.requireOrganization(userId);
-
-    await this.prisma.organization.update({
-      where: { id: organization.id },
-      data: {
-        currencyCode: input.currencyCode,
-        timezone: input.timezone,
-        financialYearStartMonth: input.financialYearStartMonth,
-      },
-    });
 
     return this.buildStatus(userId);
   }

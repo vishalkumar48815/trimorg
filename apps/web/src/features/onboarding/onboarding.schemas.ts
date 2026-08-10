@@ -27,11 +27,12 @@ export const businessStepSchema = z.object({
 });
 
 export const addressStepSchema = z.object({
-  businessAddress: z.string().trim().min(2, 'Business address is required.').max(160),
+  addressLine1: z.string().trim().min(2, 'Address line 1 is required.').max(160),
+  addressLine2: z.string().trim().max(160).optional().or(z.literal('')),
   country: z.string().trim().min(2, 'Country is required.').max(100),
   state: z.string().trim().min(2, 'State is required.').max(100),
   city: z.string().trim().min(2, 'City is required.').max(100),
-  pincode: z.string().trim().min(2, 'Pincode is required.').max(20),
+  postalCode: z.string().trim().min(2, 'Pincode is required.').max(20),
 });
 
 export const organizationStepSchema = z.object({

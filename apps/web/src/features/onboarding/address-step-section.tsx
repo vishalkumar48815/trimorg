@@ -4,7 +4,6 @@ import { ArrowLeft, ArrowRight, Loader2, LogOut } from 'lucide-react';
 import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -35,17 +34,17 @@ export function AddressStepSection({
   statusQuery,
   onPrevious,
 }: AddressStepSectionProps): ReactElement {
-  const navigate = useNavigate();
-  const { logoutUser, refetchSession } = useAuth();
+  const { logoutUser } = useAuth();
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const defaultValues = useMemo<AddressStepValues>(
     () => ({
-      businessAddress: statusQuery.data?.organization?.addressLine1 ?? '',
+      addressLine1: statusQuery.data?.organization?.addressLine1 ?? '',
+      addressLine2: statusQuery.data?.organization?.addressLine2 ?? '',
       country: statusQuery.data?.organization?.country ?? '',
       state: statusQuery.data?.organization?.state ?? '',
       city: statusQuery.data?.organization?.city ?? '',
-      pincode: statusQuery.data?.organization?.postalCode ?? '',
+      postalCode: statusQuery.data?.organization?.postalCode ?? '',
     }),
     [statusQuery.data],
   );
@@ -64,8 +63,6 @@ export function AddressStepSection({
     onSuccess: async () => {
       setFeedback('Business address saved.');
       await statusQuery.refetch();
-      await refetchSession();
-      navigate('/dashboard', { replace: true });
     },
   });
 
@@ -105,7 +102,7 @@ export function AddressStepSection({
         <PageHeader
           eyebrow="Onboarding"
           title="Business address"
-          description="Capture the business address details for this workspace."
+          description="Capture the address details for this workspace."
           actions={
             <Button variant="ghost" onClick={() => void logoutUser()}>
               <LogOut className="h-4 w-4" aria-hidden="true" />
@@ -130,18 +127,32 @@ export function AddressStepSection({
               ) : null}
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground" htmlFor="business-address">
-                  Business Address <span className="text-danger">*</span>
+                <label className="text-sm font-medium text-foreground" htmlFor="address-line-1">
+                  Address Line 1 <span className="text-danger">*</span>
                 </label>
-                <textarea
-                  id="business-address"
-                  rows={4}
+                <Input
+                  id="address-line-1"
+                  type="text"
                   placeholder="Street address, area, landmark"
-                  className="flex w-full rounded-[16px] border border-field-border bg-field-background px-4 py-3 text-sm text-foreground shadow-[var(--shadow-raised)] transition-[border-color,box-shadow,background-color] duration-200 ease-out placeholder:text-field-placeholder focus-visible:border-primary focus-visible:bg-surface focus-visible:ring-4 focus-visible:ring-primary/10 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none"
-                  {...form.register('businessAddress')}
+                  {...form.register('addressLine1')}
                 />
-                {form.formState.errors.businessAddress ? (
-                  <p className="text-sm text-danger">{form.formState.errors.businessAddress.message}</p>
+                {form.formState.errors.addressLine1 ? (
+                  <p className="text-sm text-danger">{form.formState.errors.addressLine1.message}</p>
+                ) : null}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground" htmlFor="address-line-2">
+                  Address Line 2
+                </label>
+                <Input
+                  id="address-line-2"
+                  type="text"
+                  placeholder="Apartment, suite, floor, building"
+                  {...form.register('addressLine2')}
+                />
+                {form.formState.errors.addressLine2 ? (
+                  <p className="text-sm text-danger">{form.formState.errors.addressLine2.message}</p>
                 ) : null}
               </div>
 
@@ -182,9 +193,9 @@ export function AddressStepSection({
                   <label className="text-sm font-medium text-foreground" htmlFor="pincode">
                     Pincode <span className="text-danger">*</span>
                   </label>
-                  <Input id="pincode" type="text" placeholder="400001" {...form.register('pincode')} />
-                  {form.formState.errors.pincode ? (
-                    <p className="text-sm text-danger">{form.formState.errors.pincode.message}</p>
+                  <Input id="pincode" type="text" placeholder="400001" {...form.register('postalCode')} />
+                  {form.formState.errors.postalCode ? (
+                    <p className="text-sm text-danger">{form.formState.errors.postalCode.message}</p>
                   ) : null}
                 </div>
               </div>
@@ -196,7 +207,7 @@ export function AddressStepSection({
                 </Button>
 
                 <Button type="submit" size="lg" disabled={addressMutation.isPending}>
-                  {addressMutation.isPending ? 'Saving...' : 'Finish setup'}
+                  {addressMutation.isPending ? 'Saving...' : 'Next'}
                   {addressMutation.isPending ? (
                     <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                   ) : (
@@ -207,16 +218,16 @@ export function AddressStepSection({
             </form>
           </SectionCard>
 
-          <SectionCard title="Final step" description="Saving this completes onboarding and opens the dashboard.">
+          <SectionCard title="Step 2 details" description="Address values stay available after refresh.">
             <div className="space-y-4 text-sm text-muted-foreground">
               <p>
-                When you finish this step, Trimorg marks the workspace as ready and sends you to the dashboard.
+                Step 2 stores only the address fields and keeps them ready for later onboarding steps.
               </p>
               <div className="space-y-3">
                 {[
-                  'Business details are saved first.',
-                  'Address details complete the current onboarding flow.',
-                  'After save, your session refreshes and the dashboard opens automatically.',
+                  'Address Line 1 and Address Line 2 are saved separately.',
+                  'Country, state, city, and pincode persist on the organization record.',
+                  'Previous keeps the business details from Step 1 intact.',
                 ].map((item) => (
                   <div
                     key={item}

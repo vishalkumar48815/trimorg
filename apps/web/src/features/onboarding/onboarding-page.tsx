@@ -5,15 +5,20 @@ import { fetchOnboardingStatus } from '@/features/onboarding/onboarding.api';
 import type { OnboardingStatus } from '@/features/onboarding/onboarding.types';
 import { AddressStepSection } from '@/features/onboarding/address-step-section';
 import { BusinessStepSection } from '@/features/onboarding/business-step-section';
+import { PreferencesStepSection } from '@/features/onboarding/preferences-step-section';
 
-type OnboardingStep = 1 | 2;
+type OnboardingStep = 1 | 2 | 3;
 
 function resolveOnboardingStep(status: OnboardingStatus | undefined): OnboardingStep {
   if (!status?.organization || status.organization.businessType === 'Pending' || status.currentStep <= 1) {
     return 1;
   }
 
-  return 2;
+  if (status.currentStep <= 2) {
+    return 2;
+  }
+
+  return 3;
 }
 
 export function OnboardingPage(): ReactElement {
@@ -33,5 +38,9 @@ export function OnboardingPage(): ReactElement {
     return <BusinessStepSection statusQuery={statusQuery} onStepComplete={() => setActiveStep(2)} />;
   }
 
-  return <AddressStepSection statusQuery={statusQuery} onPrevious={() => setActiveStep(1)} />;
+  if (activeStep === 2) {
+    return <AddressStepSection statusQuery={statusQuery} onPrevious={() => setActiveStep(1)} />;
+  }
+
+  return <PreferencesStepSection statusQuery={statusQuery} onPrevious={() => setActiveStep(2)} />;
 }

@@ -5,7 +5,7 @@ import { Slot } from 'radix-ui';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[16px] text-sm font-medium transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out outline-none focus-visible:ring-4 focus-visible:ring-primary/15 disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-danger/20 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+  'inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out outline-none focus-visible:ring-4 focus-visible:ring-primary/15 disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-danger/20 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
     variants: {
       variant: {
@@ -27,7 +27,7 @@ const buttonVariants = cva(
         sm: 'h-9 gap-1.5 px-3 has-[>svg]:px-2.5',
         lg: 'h-12 px-6 has-[>svg]:px-4',
         icon: 'size-11',
-        'icon-xs': 'size-8 rounded-[12px]',
+        'icon-xs': 'size-8',
         'icon-sm': 'size-9',
         'icon-lg': 'size-12',
       },

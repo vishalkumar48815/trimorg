@@ -14,7 +14,9 @@ import { OnboardingModule } from './onboarding/onboarding.module';
 import { OrganizationModule } from './organization/organization.module';
 import { ProductsModule } from './products/products.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { PurchasesModule } from './purchases/purchases.module';
 import { SalesModule } from './sales/sales.module';
+import { SuppliersModule } from './suppliers/suppliers.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -30,6 +32,8 @@ import { UsersModule } from './users/users.module';
     ProductsModule,
     CategoriesModule,
     CustomersModule,
+    SuppliersModule,
+    PurchasesModule,
     SalesModule,
   ],
   controllers: [AppController],

@@ -8,6 +8,7 @@ import { ProfilePage } from '@/features/account/profile-page';
 import { CategoriesPage } from '@/features/categories/categories-page';
 import { CustomersPage } from '@/features/customers';
 import { DashboardPage } from '@/features/dashboard/dashboard-page';
+import { InventoryPage } from '@/features/inventory';
 import { ProductsPage } from '@/features/products/products-page';
 import { InvoicesPage, NewSalePage } from '@/features/sales';
 
@@ -15,6 +16,7 @@ const DASHBOARD_PATH = '/dashboard';
 const CATEGORIES_PATH = '/business/categories';
 const PRODUCTS_PATH = '/business/products';
 const CUSTOMERS_PATH = '/business/customers';
+const INVENTORY_PATH = '/business/inventory';
 const SALES_POS_PATH = '/sales/pos';
 const SALES_INVOICES_PATH = '/sales/invoices';
 
@@ -23,6 +25,7 @@ const EXPLICIT_ROUTES = new Set([
   CATEGORIES_PATH,
   PRODUCTS_PATH,
   CUSTOMERS_PATH,
+  INVENTORY_PATH,
   SALES_POS_PATH,
   SALES_INVOICES_PATH,
 ]);
@@ -41,6 +44,7 @@ export function AppRoutes() {
       <Route path={PRODUCTS_PATH} element={<ProductsPage />} />
       <Route path={CATEGORIES_PATH} element={<CategoriesPage />} />
       <Route path={CUSTOMERS_PATH} element={<CustomersPage />} />
+      <Route path={INVENTORY_PATH} element={<InventoryPage />} />
       <Route path={SALES_POS_PATH} element={<NewSalePage />} />
       <Route path={SALES_INVOICES_PATH} element={<InvoicesPage />} />
       {/* Account routes are reachable only via the User Menu, not the sidebar */}

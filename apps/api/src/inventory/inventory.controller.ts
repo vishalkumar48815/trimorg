@@ -4,6 +4,8 @@ import {
   Get,
   Param,
   Patch,
+  Post,
+  Query,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
@@ -13,13 +15,52 @@ import { createSuccessResponse } from '../common/api-response';
 import type { ApiSuccess } from '../common/api-response';
 import type { RequestUser } from '../common/request-user.type';
 import { InventoryService } from './inventory.service';
-import { ProductIdDto, UpdateProductStockDto } from './inventory.schemas';
+import {
+  AdjustStockDto,
+  ProductIdDto,
+  StockMovementsQueryDto,
+  UpdateProductStockDto,
+} from './inventory.schemas';
 import type { ProductListItem } from '../products/products.types';
+import type {
+  AdjustStockResult,
+  InventorySummary,
+  StockMovementListItem,
+} from './inventory.types';
 
-@Controller('products')
+@Controller('inventory')
 @UseGuards(AuthGuard)
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}
+
+  @Get('summary')
+  async getInventorySummary(
+    @CurrentUser() user: RequestUser | null,
+  ): Promise<ApiSuccess<InventorySummary>> {
+    const summary = await this.inventoryService.getInventorySummary(this.requireUser(user));
+    return createSuccessResponse(summary);
+  }
+
+  @Get('movements')
+  async getStockMovements(
+    @CurrentUser() user: RequestUser | null,
+    @Query() query: StockMovementsQueryDto,
+  ): Promise<ApiSuccess<StockMovementListItem[]>> {
+    const movements = await this.inventoryService.getStockMovements(
+      this.requireUser(user),
+      query,
+    );
+    return createSuccessResponse(movements);
+  }
+
+  @Post('adjust')
+  async adjustStock(
+    @CurrentUser() user: RequestUser | null,
+    @Body() body: AdjustStockDto,
+  ): Promise<ApiSuccess<AdjustStockResult>> {
+    const result = await this.inventoryService.adjustStock(this.requireUser(user), body);
+    return createSuccessResponse(result);
+  }
 
   @Get('low-stock')
   async getLowStockProducts(
@@ -29,7 +70,7 @@ export class InventoryController {
     return createSuccessResponse(products);
   }
 
-  @Patch(':id/stock')
+  @Patch('products/:id/stock')
   async updateProductStock(
     @CurrentUser() user: RequestUser | null,
     @Param() params: ProductIdDto,

@@ -121,6 +121,9 @@ const mockPrismaService = {
     findMany: jest.fn().mockResolvedValue([mockCreatedSale]),
     findFirst: jest.fn().mockResolvedValue(mockCreatedSale),
   },
+  stockMovement: {
+    create: jest.fn().mockResolvedValue({}),
+  },
   $transaction: jest.fn().mockImplementation(async (callback) => {
     return callback(mockPrismaService);
   }),

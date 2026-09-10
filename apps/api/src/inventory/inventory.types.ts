@@ -1,13 +1,7 @@
-export type StockMovementType =
-  | 'SALE'
-  | 'PURCHASE'
-  | 'ADJUSTMENT'
-  | 'RETURN'
-  | 'DAMAGE'
-  | 'RESTOCK'
-  | 'INITIAL';
+import type { StockMovementType } from '@prisma/client';
+import type { ProductListItem } from '../products/products.types';
 
-export interface StockMovementRecord {
+export interface StockMovementListItem {
   id: string;
   productId: string;
   productName: string;
@@ -18,7 +12,7 @@ export interface StockMovementRecord {
   newStock: number;
   referenceId: string | null;
   reason: string | null;
-  createdAt: string;
+  createdAt: Date;
 }
 
 export interface InventorySummary {
@@ -31,14 +25,7 @@ export interface InventorySummary {
   totalMovementsCount: number;
 }
 
-export interface StockUpdateInput {
-  currentStock: number;
-  reorderLevel: number;
-}
-
-export interface StockAdjustmentInput {
-  productId: string;
-  type: 'ADJUSTMENT' | 'DAMAGE' | 'RESTOCK' | 'RETURN' | 'INITIAL';
-  quantityDelta: number;
-  reason?: string;
+export interface AdjustStockResult {
+  product: ProductListItem;
+  movement: StockMovementListItem;
 }

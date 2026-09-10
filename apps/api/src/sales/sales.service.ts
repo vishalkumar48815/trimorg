@@ -167,20 +167,6 @@ export class SalesService {
 
     // Execute atomic transaction
     const createdSale = await this.prisma.$transaction(async (tx) => {
-      // Decrement stock for physical items
-      for (const item of preparedItems) {
-        if (!item.isService) {
-          await tx.product.update({
-            where: { id: item.productId },
-            data: {
-              currentStock: {
-                decrement: item.quantity,
-              },
-            },
-          });
-        }
-      }
-
       // Create Sale
       const sale = await tx.sale.create({
         data: {
@@ -234,6 +220,35 @@ export class SalesService {
           },
         },
       });
+
+      // Decrement stock and record StockMovement audit logs for physical items
+      for (const item of preparedItems) {
+        if (!item.isService) {
+          const product = products.find((p) => p.id === item.productId);
+          const previousStock = product?.currentStock ?? 0;
+          const newStock = previousStock - item.quantity;
+
+          await tx.product.update({
+            where: { id: item.productId },
+            data: {
+              currentStock: newStock,
+            },
+          });
+
+          await tx.stockMovement.create({
+            data: {
+              organizationId,
+              productId: item.productId,
+              type: 'SALE',
+              quantityDelta: -item.quantity,
+              previousStock,
+              newStock,
+              referenceId: sale.id,
+              reason: `POS Sale #${saleNumber}`,
+            },
+          });
+        }
+      }
 
       return sale;
     });

@@ -10,10 +10,15 @@ function serializeProduct(product: Product): ProductListItem {
     id: product.id,
     name: product.name,
     sku: product.sku,
+    barcode: product.barcode,
     category: product.category,
     sellingPrice: product.sellingPrice.toString(),
+    costPrice: product.costPrice.toString(),
+    isService: product.isService,
     currentStock: product.currentStock,
     reorderLevel: product.reorderLevel,
+    unitType: product.unitType,
+    taxRate: product.taxRate.toString(),
     status: product.status,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
@@ -82,7 +87,7 @@ export class InventoryService {
     });
 
     return products
-      .filter((product) => product.currentStock <= product.reorderLevel)
+      .filter((product) => !product.isService && product.currentStock <= product.reorderLevel)
       .map(serializeProduct);
   }
 

@@ -10,7 +10,10 @@ import { PageHeader } from '@/components/ui/page-header';
 import { SectionCard } from '@/components/ui/section-card';
 import { PageContainer } from '@/shell/page-container';
 import { AccountToast } from '@/features/account/account-toast';
-import { fetchOrganizationProfile, updateOrganizationProfile } from '@/features/account/account.api';
+import {
+  fetchOrganizationProfile,
+  updateOrganizationProfile,
+} from '@/features/account/account.api';
 import {
   businessSettingsSchema,
   type BusinessSettingsValues,
@@ -167,7 +170,10 @@ export function BusinessSettingsPage(): ReactElement {
             await updateMutation.mutateAsync(values);
           })}
         >
-          <SectionCard title="Business identity" description="How your business is identified across Trimorg.">
+          <SectionCard
+            title="Business identity"
+            description="How your business is identified across Trimorg."
+          >
             <div className="grid gap-6 sm:grid-cols-2">
               <div className="space-y-2 sm:col-span-2">
                 <label className="text-sm font-medium text-foreground" htmlFor="business-name">
@@ -178,10 +184,17 @@ export function BusinessSettingsPage(): ReactElement {
                     className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
                     aria-hidden="true"
                   />
-                  <Input id="business-name" type="text" className="pl-9" {...form.register('businessName')} />
+                  <Input
+                    id="business-name"
+                    type="text"
+                    className="pl-9"
+                    {...form.register('businessName')}
+                  />
                 </div>
                 {form.formState.errors.businessName ? (
-                  <p className="text-sm text-danger">{form.formState.errors.businessName.message}</p>
+                  <p className="text-sm text-danger">
+                    {form.formState.errors.businessName.message}
+                  </p>
                 ) : null}
               </div>
 
@@ -202,7 +215,9 @@ export function BusinessSettingsPage(): ReactElement {
                   ))}
                 </select>
                 {form.formState.errors.businessType ? (
-                  <p className="text-sm text-danger">{form.formState.errors.businessType.message}</p>
+                  <p className="text-sm text-danger">
+                    {form.formState.errors.businessType.message}
+                  </p>
                 ) : null}
               </div>
 
@@ -221,7 +236,11 @@ export function BusinessSettingsPage(): ReactElement {
                 <div className="flex items-center gap-4">
                   <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-surface-secondary">
                     {logoPreview ? (
-                      <img src={logoPreview} alt="Business logo" className="h-full w-full object-cover" />
+                      <img
+                        src={logoPreview}
+                        alt="Business logo"
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
                       <ImageUp className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
                     )}
@@ -229,7 +248,12 @@ export function BusinessSettingsPage(): ReactElement {
                   <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
                     <ImageUp className="h-4 w-4" aria-hidden="true" />
                     Upload logo
-                    <input type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleLogoChange}
+                    />
                   </label>
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -247,7 +271,9 @@ export function BusinessSettingsPage(): ReactElement {
                 </label>
                 <Input id="address-line-1" type="text" {...form.register('addressLine1')} />
                 {form.formState.errors.addressLine1 ? (
-                  <p className="text-sm text-danger">{form.formState.errors.addressLine1.message}</p>
+                  <p className="text-sm text-danger">
+                    {form.formState.errors.addressLine1.message}
+                  </p>
                 ) : null}
               </div>
 
@@ -255,7 +281,12 @@ export function BusinessSettingsPage(): ReactElement {
                 <label className="text-sm font-medium text-foreground" htmlFor="address-line-2">
                   Address Line 2
                 </label>
-                <Input id="address-line-2" type="text" placeholder="Optional" {...form.register('addressLine2')} />
+                <Input
+                  id="address-line-2"
+                  type="text"
+                  placeholder="Optional"
+                  {...form.register('addressLine2')}
+                />
               </div>
 
               <div className="space-y-2">
@@ -300,7 +331,10 @@ export function BusinessSettingsPage(): ReactElement {
             </div>
           </SectionCard>
 
-          <SectionCard title="Regional preferences" description="Applied across invoices, reports, and dates.">
+          <SectionCard
+            title="Regional preferences"
+            description="Applied across invoices, reports, and dates."
+          >
             <div className="grid gap-6 sm:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground" htmlFor="currency">
@@ -318,7 +352,9 @@ export function BusinessSettingsPage(): ReactElement {
                   ))}
                 </select>
                 {form.formState.errors.currencyCode ? (
-                  <p className="text-sm text-danger">{form.formState.errors.currencyCode.message}</p>
+                  <p className="text-sm text-danger">
+                    {form.formState.errors.currencyCode.message}
+                  </p>
                 ) : null}
               </div>
 
@@ -326,7 +362,12 @@ export function BusinessSettingsPage(): ReactElement {
                 <label className="text-sm font-medium text-foreground" htmlFor="timezone">
                   Timezone
                 </label>
-                <Input id="timezone" type="text" placeholder="Asia/Kolkata" {...form.register('timezone')} />
+                <Input
+                  id="timezone"
+                  type="text"
+                  placeholder="Asia/Kolkata"
+                  {...form.register('timezone')}
+                />
                 {form.formState.errors.timezone ? (
                   <p className="text-sm text-danger">{form.formState.errors.timezone.message}</p>
                 ) : null}

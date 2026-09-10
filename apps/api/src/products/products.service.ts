@@ -20,10 +20,15 @@ function serializeProduct(product: Product): ProductListItem {
     id: product.id,
     name: product.name,
     sku: product.sku,
+    barcode: product.barcode,
     category: product.category,
     sellingPrice: product.sellingPrice.toString(),
+    costPrice: product.costPrice.toString(),
+    isService: product.isService,
     currentStock: product.currentStock,
     reorderLevel: product.reorderLevel,
+    unitType: product.unitType,
+    taxRate: product.taxRate.toString(),
     status: product.status,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
@@ -50,12 +55,32 @@ function buildProductUpdateData(input: UpdateProductInput): Prisma.ProductUpdate
     data.sku = input.sku;
   }
 
+  if (input.barcode !== undefined) {
+    data.barcode = input.barcode;
+  }
+
   if (input.category !== undefined) {
     data.category = input.category;
   }
 
   if (input.sellingPrice !== undefined) {
     data.sellingPrice = input.sellingPrice;
+  }
+
+  if (input.costPrice !== undefined) {
+    data.costPrice = input.costPrice;
+  }
+
+  if (input.isService !== undefined) {
+    data.isService = input.isService;
+  }
+
+  if (input.unitType !== undefined) {
+    data.unitType = input.unitType;
+  }
+
+  if (input.taxRate !== undefined) {
+    data.taxRate = input.taxRate;
   }
 
   if (input.status !== undefined) {
@@ -83,10 +108,15 @@ export class ProductsService {
           organizationId: user.organizationId,
           name: input.name,
           sku: input.sku,
+          barcode: input.barcode,
           category: input.category,
           sellingPrice: input.sellingPrice,
-          currentStock: input.currentStock,
-          reorderLevel: input.reorderLevel,
+          costPrice: input.costPrice ?? 0,
+          isService: input.isService ?? false,
+          currentStock: input.isService ? 0 : (input.currentStock ?? 0),
+          reorderLevel: input.isService ? 0 : (input.reorderLevel ?? 0),
+          unitType: input.unitType ?? 'PCS',
+          taxRate: input.taxRate ?? 0,
           status: 'ACTIVE',
         },
       });
@@ -121,6 +151,12 @@ export class ProductsService {
         },
         {
           sku: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+        {
+          barcode: {
             contains: search,
             mode: 'insensitive',
           },

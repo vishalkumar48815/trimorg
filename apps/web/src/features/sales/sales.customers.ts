@@ -1,40 +1,57 @@
 import { apiRequest } from '@/lib/api';
+import type { SaleCustomer } from './sales.types';
 
-export interface SaleCustomer {
-  id: string;
+export interface CreateCustomerPayload {
   name: string;
   mobile: string;
+  email?: string;
+  gst?: string;
+  address?: string;
+  vehicleDetails?: string;
 }
 
 interface RawCustomerRecord {
   id: string;
-  name?: string | null;
-  fullName?: string | null;
-  customerName?: string | null;
-  mobile?: string | null;
-  mobileNumber?: string | null;
-  phone?: string | null;
+  name: string;
+  mobile: string;
+  email?: string | null;
+  gst?: string | null;
+  address?: string | null;
+  vehicleDetails?: string | null;
 }
 
-function toCustomerName(record: RawCustomerRecord): string {
-  return (
-    record.name?.trim() || record.fullName?.trim() || record.customerName?.trim() || 'Customer'
-  );
-}
-
-function toCustomerMobile(record: RawCustomerRecord): string {
-  return record.mobile?.trim() || record.mobileNumber?.trim() || record.phone?.trim() || '-';
-}
-
-export async function fetchCustomers(): Promise<SaleCustomer[]> {
-  const customers = await apiRequest<RawCustomerRecord[]>('/customers', {
+export async function fetchCustomers(search?: string): Promise<SaleCustomer[]> {
+  const query = search ? `?search=${encodeURIComponent(search.trim())}` : '';
+  const customers = await apiRequest<RawCustomerRecord[]>(`/customers${query}`, {
     method: 'GET',
     auth: true,
   });
 
-  return customers.map((customer) => ({
-    id: customer.id,
-    name: toCustomerName(customer),
-    mobile: toCustomerMobile(customer),
+  return customers.map((c) => ({
+    id: c.id,
+    name: c.name,
+    mobile: c.mobile,
+    email: c.email,
+    gst: c.gst,
+    address: c.address,
+    vehicleDetails: c.vehicleDetails,
   }));
+}
+
+export async function createCustomer(payload: CreateCustomerPayload): Promise<SaleCustomer> {
+  const created = await apiRequest<RawCustomerRecord>('/customers', {
+    method: 'POST',
+    auth: true,
+    body: payload,
+  });
+
+  return {
+    id: created.id,
+    name: created.name,
+    mobile: created.mobile,
+    email: created.email,
+    gst: created.gst,
+    address: created.address,
+    vehicleDetails: created.vehicleDetails,
+  };
 }

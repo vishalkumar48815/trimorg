@@ -92,10 +92,7 @@ export class AuthController {
 
   @Post('change-password')
   @UseGuards(AuthGuard)
-  async changePassword(
-    @CurrentUser() user: RequestUser | null,
-    @Body() body: ChangePasswordDto,
-  ) {
+  async changePassword(@CurrentUser() user: RequestUser | null, @Body() body: ChangePasswordDto) {
     if (!user) {
       throw new UnauthorizedException({
         code: 'Unauthorized',

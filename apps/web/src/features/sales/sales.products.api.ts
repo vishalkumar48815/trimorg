@@ -7,9 +7,14 @@ function mapProduct(record: ProductRecord): SaleProduct {
     id: record.id,
     name: record.name,
     sku: record.sku,
+    barcode: record.barcode,
     category: record.category,
     sellingPrice: Number(record.sellingPrice),
+    costPrice: record.costPrice ? Number(record.costPrice) : 0,
+    isService: Boolean(record.isService),
     currentStock: record.currentStock,
+    unitType: record.unitType || 'PCS',
+    taxRate: record.taxRate ? Number(record.taxRate) : 0,
     status: record.status,
   };
 }

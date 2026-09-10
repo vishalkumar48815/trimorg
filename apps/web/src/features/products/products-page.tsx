@@ -40,10 +40,15 @@ function toCreateProductInput(values: ProductFormValues): ProductCreateInput {
   return {
     name: values.name,
     sku: values.sku,
+    barcode: values.barcode || undefined,
     category: values.category,
     sellingPrice: Number(values.sellingPrice),
-    currentStock: Number(values.currentStock),
-    reorderLevel: Number(values.reorderLevel),
+    costPrice: values.costPrice ? Number(values.costPrice) : 0,
+    isService: values.isService ?? false,
+    currentStock: values.isService ? 0 : Number(values.currentStock || 0),
+    reorderLevel: values.isService ? 0 : Number(values.reorderLevel || 0),
+    unitType: values.unitType || 'PCS',
+    taxRate: values.taxRate ? Number(values.taxRate) : 0,
   };
 }
 
@@ -51,8 +56,13 @@ function toUpdateProductInput(values: ProductFormValues): ProductUpdateInput {
   return {
     name: values.name,
     sku: values.sku,
+    barcode: values.barcode || undefined,
     category: values.category,
     sellingPrice: Number(values.sellingPrice),
+    costPrice: values.costPrice ? Number(values.costPrice) : undefined,
+    isService: values.isService,
+    unitType: values.unitType,
+    taxRate: values.taxRate ? Number(values.taxRate) : undefined,
     status: values.status,
   };
 }

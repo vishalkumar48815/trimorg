@@ -68,9 +68,10 @@ export const navigationConfig: NavItem[] = [
     title: 'Sales',
     icon: ShoppingCart,
     children: [
+      { id: 'sales-pos', title: 'New Sale / POS', icon: ShoppingCart, path: '/sales/pos' },
+      { id: 'sales-invoices', title: 'Invoices', icon: Receipt, path: '/sales/invoices' },
       { id: 'sales-quotations', title: 'Quotations', icon: FileText, path: '/sales/quotations' },
       { id: 'sales-orders', title: 'Orders', icon: ClipboardList, path: '/sales/orders' },
-      { id: 'sales-invoices', title: 'Invoices', icon: Receipt, path: '/sales/invoices' },
       { id: 'sales-payments', title: 'Payments', icon: CreditCard, path: '/sales/payments' },
     ],
   },

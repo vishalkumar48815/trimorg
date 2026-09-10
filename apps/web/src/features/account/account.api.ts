@@ -32,9 +32,7 @@ export async function updateOrganizationProfile(
   });
 }
 
-export async function changePassword(
-  input: ChangePasswordValues,
-): Promise<{ message: string }> {
+export async function changePassword(input: ChangePasswordValues): Promise<{ message: string }> {
   return apiRequest<{ message: string }>('/auth/change-password', {
     method: 'POST',
     body: input,

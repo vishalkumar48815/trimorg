@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Wrench } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -31,10 +31,15 @@ interface ProductDrawerProps {
 const DEFAULT_VALUES: ProductFormValues = {
   name: '',
   sku: '',
+  barcode: '',
   category: '',
   sellingPrice: '',
+  costPrice: '',
+  isService: false,
   currentStock: '0',
   reorderLevel: '0',
+  unitType: 'PCS',
+  taxRate: '0',
   status: 'ACTIVE',
 };
 
@@ -43,10 +48,15 @@ function getFormValues(mode: 'create' | 'edit', product: ProductRecord | null): 
     return {
       name: product.name,
       sku: product.sku,
+      barcode: product.barcode || '',
       category: product.category,
       sellingPrice: product.sellingPrice,
+      costPrice: product.costPrice || '',
+      isService: Boolean(product.isService),
       currentStock: String(product.currentStock),
       reorderLevel: String(product.reorderLevel),
+      unitType: product.unitType || 'PCS',
+      taxRate: product.taxRate || '0',
       status: product.status,
     };
   }
@@ -80,69 +90,114 @@ export function CreateProductDrawer({
     }
   }, [form, form.formState.isDirty, mode, open, product]);
 
-  const title = mode === 'edit' ? 'Edit Product' : 'Create Product';
+  const isService = form.watch('isService');
+  const title = mode === 'edit' ? 'Edit Item' : 'Create Item';
   const description =
     mode === 'edit'
-      ? 'Update the product basics and keep the catalog accurate.'
-      : 'Add a product with basic information. You can edit details later.';
-  const submitLabel = mode === 'edit' ? 'Save Changes' : 'Save Product';
+      ? 'Update catalog item information and pricing.'
+      : 'Add a new product or service/labor item to your catalog.';
+  const submitLabel = mode === 'edit' ? 'Save Changes' : 'Save Item';
   const categories = categoriesQuery.data ?? [];
   const selectedCategory = form.watch('category');
   const hasSelectedCategory = categories.some((category) => category.name === selectedCategory);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full max-w-none sm:w-[480px] sm:max-w-[480px]">
+      <SheetContent side="right" className="w-full max-w-none sm:w-[500px] sm:max-w-[500px]">
         <form
           className="flex h-full flex-col"
           onSubmit={form.handleSubmit(async (values) => {
             await onSubmit(values);
           })}
         >
-          <SheetHeader className="border-b border-border px-6 pb-6 pt-6">
+          <SheetHeader className="border-b border-border px-6 pb-5 pt-6">
             <SheetTitle>{title}</SheetTitle>
             <SheetDescription>{description}</SheetDescription>
           </SheetHeader>
 
-          <div className="flex-1 space-y-5 overflow-y-auto px-6 py-6">
+          <div className="flex-1 space-y-4 overflow-y-auto px-6 py-6">
             {errorMessage ? (
-              <div className="rounded-[16px] border border-danger/20 bg-danger/5 px-4 py-3 text-sm text-danger">
+              <div className="rounded-[14px] border border-danger/20 bg-danger/5 px-4 py-3 text-xs text-danger">
                 {errorMessage}
               </div>
             ) : null}
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground" htmlFor="product-name">
-                Product Name <span className="text-danger">*</span>
+            {/* Service vs Physical Goods Selector */}
+            <div className="rounded-[14px] border border-border bg-surface-secondary/40 p-3">
+              <label className="flex items-center gap-2.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  {...form.register('isService')}
+                  className="size-4 rounded border-border text-primary focus:ring-primary/20"
+                />
+                <div>
+                  <span className="text-xs font-semibold text-foreground flex items-center gap-1">
+                    <Wrench className="h-3.5 w-3.5 text-indigo-500" />
+                    This is a Service / Labor charge
+                  </span>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    Service items (e.g. EV Repair Labor) don&apos;t require physical stock tracking.
+                  </p>
+                </div>
+              </label>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-foreground" htmlFor="product-name">
+                Item Name <span className="text-danger">*</span>
               </label>
               <Input
                 id="product-name"
                 type="text"
-                placeholder="Parle-G"
+                placeholder={
+                  isService ? 'e.g. Brake Service Labor' : 'e.g. Front Brake Pad (Ather)'
+                }
                 {...form.register('name')}
+                className="h-10 text-sm"
               />
               {form.formState.errors.name ? (
-                <p className="text-sm text-danger">{form.formState.errors.name.message}</p>
+                <p className="text-xs text-danger">{form.formState.errors.name.message}</p>
               ) : null}
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground" htmlFor="sku">
-                SKU <span className="text-danger">*</span>
-              </label>
-              <Input id="sku" type="text" placeholder="PARLE001" {...form.register('sku')} />
-              {form.formState.errors.sku ? (
-                <p className="text-sm text-danger">{form.formState.errors.sku.message}</p>
-              ) : null}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-foreground" htmlFor="sku">
+                  SKU / Code <span className="text-danger">*</span>
+                </label>
+                <Input
+                  id="sku"
+                  type="text"
+                  placeholder="e.g. BP-01"
+                  {...form.register('sku')}
+                  className="h-10 text-sm"
+                />
+                {form.formState.errors.sku ? (
+                  <p className="text-xs text-danger">{form.formState.errors.sku.message}</p>
+                ) : null}
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-foreground" htmlFor="barcode">
+                  Barcode (Optional)
+                </label>
+                <Input
+                  id="barcode"
+                  type="text"
+                  placeholder="Scan / EAN"
+                  {...form.register('barcode')}
+                  className="h-10 text-sm"
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground" htmlFor="category">
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-foreground" htmlFor="category">
                 Category <span className="text-danger">*</span>
               </label>
               <select
                 id="category"
-                className="flex h-11 w-full rounded-[16px] border border-field-border bg-field-background px-4 text-sm text-foreground shadow-[var(--shadow-raised)] transition-[border-color,box-shadow,background-color] duration-200 ease-out focus-visible:border-primary focus-visible:bg-surface focus-visible:ring-4 focus-visible:ring-primary/10 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none"
+                className="flex h-10 w-full rounded-[14px] border border-field-border bg-field-background px-3 text-sm text-foreground shadow-xs focus-visible:border-primary focus-visible:outline-none"
                 {...form.register('category')}
                 disabled={categoriesQuery.isLoading || categoriesQuery.isError}
               >
@@ -159,90 +214,118 @@ export function CreateProductDrawer({
                 ))}
               </select>
               {form.formState.errors.category ? (
-                <p className="text-sm text-danger">{form.formState.errors.category.message}</p>
-              ) : null}
-              {categoriesQuery.isError ? (
-                <p className="text-sm text-danger">Unable to load categories.</p>
+                <p className="text-xs text-danger">{form.formState.errors.category.message}</p>
               ) : null}
             </div>
 
-            {mode === 'create' ? (
-              <>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground" htmlFor="current-stock">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-foreground" htmlFor="selling-price">
+                  Selling Price (₹) <span className="text-danger">*</span>
+                </label>
+                <Input
+                  id="selling-price"
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00"
+                  {...form.register('sellingPrice')}
+                  className="h-10 text-sm"
+                />
+                {form.formState.errors.sellingPrice ? (
+                  <p className="text-xs text-danger">
+                    {form.formState.errors.sellingPrice.message}
+                  </p>
+                ) : null}
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-foreground" htmlFor="cost-price">
+                  Cost / Buy Price (₹)
+                </label>
+                <Input
+                  id="cost-price"
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00"
+                  {...form.register('costPrice')}
+                  className="h-10 text-sm"
+                />
+              </div>
+            </div>
+
+            {/* Inventory fields (only for physical goods) */}
+            {!isService && mode === 'create' ? (
+              <div className="grid grid-cols-3 gap-3">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-foreground" htmlFor="current-stock">
                     Opening Stock
                   </label>
                   <Input
                     id="current-stock"
                     type="number"
-                    inputMode="numeric"
                     min="0"
-                    step="1"
                     placeholder="0"
                     {...form.register('currentStock')}
+                    className="h-10 text-sm"
                   />
-                  {form.formState.errors.currentStock ? (
-                    <p className="text-sm text-danger">
-                      {form.formState.errors.currentStock.message}
-                    </p>
-                  ) : null}
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground" htmlFor="reorder-level">
-                    Reorder Level
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-foreground" htmlFor="reorder-level">
+                    Reorder Alert
                   </label>
                   <Input
                     id="reorder-level"
                     type="number"
-                    inputMode="numeric"
                     min="0"
-                    step="1"
                     placeholder="0"
                     {...form.register('reorderLevel')}
+                    className="h-10 text-sm"
                   />
-                  {form.formState.errors.reorderLevel ? (
-                    <p className="text-sm text-danger">
-                      {form.formState.errors.reorderLevel.message}
-                    </p>
-                  ) : null}
                 </div>
-              </>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-foreground" htmlFor="unit-type">
+                    Unit
+                  </label>
+                  <select
+                    id="unit-type"
+                    {...form.register('unitType')}
+                    className="flex h-10 w-full rounded-[14px] border border-field-border bg-field-background px-2 text-xs text-foreground focus-visible:outline-none"
+                  >
+                    <option value="PCS">PCS</option>
+                    <option value="SET">SET</option>
+                    <option value="HRS">HRS</option>
+                    <option value="LTR">LTR</option>
+                    <option value="MTR">MTR</option>
+                  </select>
+                </div>
+              </div>
             ) : null}
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground" htmlFor="selling-price">
-                Selling Price <span className="text-danger">*</span>
-              </label>
-              <Input
-                id="selling-price"
-                type="number"
-                inputMode="decimal"
-                min="0"
-                step="0.01"
-                placeholder="10"
-                {...form.register('sellingPrice')}
-              />
-              {form.formState.errors.sellingPrice ? (
-                <p className="text-sm text-danger">{form.formState.errors.sellingPrice.message}</p>
-              ) : null}
-            </div>
-
             {mode === 'edit' ? (
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground" htmlFor="status">
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-foreground" htmlFor="status">
                   Status <span className="text-danger">*</span>
                 </label>
-                <Input id="status" type="text" placeholder="ACTIVE" {...form.register('status')} />
-                {form.formState.errors.status ? (
-                  <p className="text-sm text-danger">{form.formState.errors.status.message}</p>
-                ) : null}
+                <select
+                  id="status"
+                  {...form.register('status')}
+                  className="flex h-10 w-full rounded-[14px] border border-field-border bg-field-background px-3 text-sm text-foreground focus-visible:outline-none"
+                >
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="INACTIVE">INACTIVE</option>
+                </select>
               </div>
             ) : null}
           </div>
 
-          <SheetFooter className="border-t border-border bg-surface px-6 py-6">
-            <div className="flex flex-col gap-3 sm:flex-row">
+          <SheetFooter className="border-t border-border bg-surface px-6 py-5">
+            <div className="flex flex-col gap-3 sm:flex-row w-full">
               <Button
                 type="button"
                 variant="outline"

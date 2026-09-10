@@ -24,25 +24,31 @@ enum SaleStatus {
   CANCELLED
 }
 
+enum SaleType {
+  INVOICE
+  QUOTATION
+  ORDER
+}
+
 model User {
-  id                         String      @id @default(cuid())
-  email                      String      @unique
+  id                         String        @id @default(cuid())
+  email                      String        @unique
   fullName                   String
   mobile                     String
   passwordHash               String
-  role                       UserRole    @default(OWNER)
-  isEmailVerified            Boolean     @default(false)
+  role                       UserRole      @default(OWNER)
+  isEmailVerified            Boolean       @default(false)
   emailVerificationTokenHash String?
-  emailVerificationExpiresAt  DateTime?
+  emailVerificationExpiresAt DateTime?
   passwordResetTokenHash     String?
   passwordResetExpiresAt     DateTime?
   refreshTokenHash           String?
   refreshTokenExpiresAt      DateTime?
   onboardingCompletedAt      DateTime?
-  organizationId             String?     @unique
+  organizationId             String?       @unique
   organization               Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  createdAt                  DateTime    @default(now())
-  updatedAt                  DateTime    @updatedAt
+  createdAt                  DateTime      @default(now())
+  updatedAt                  DateTime      @updatedAt
 }
 
 model PendingSignup {
@@ -53,107 +59,131 @@ model PendingSignup {
   mobile                     String
   passwordHash               String
   emailVerificationTokenHash String
-  emailVerificationExpiresAt  DateTime
+  emailVerificationExpiresAt DateTime
   createdAt                  DateTime @default(now())
   updatedAt                  DateTime @updatedAt
 }
 
 model Organization {
-  id                     String             @id @default(cuid())
-  businessName           String
-  businessType           String
-  ownerName              String
-  mobile                 String
-  gst                    String?
-  addressLine1           String?
-  addressLine2           String?
-  city                   String?
-  state                  String?
-  postalCode             String?
-  country                String?
-  currencyCode           String?
-  timezone               String?
+  id                      String             @id @default(cuid())
+  businessName            String
+  businessType            String
+  ownerName               String
+  mobile                  String
+  gst                     String?
+  addressLine1            String?
+  addressLine2            String?
+  city                    String?
+  state                   String?
+  postalCode              String?
+  country                 String?
+  currencyCode            String?
+  timezone                String?
   financialYearStartMonth Int?
-  logoUrl                String?
-  logoMimeType           String?
-  logoFileName           String?
-  status                 OrganizationStatus @default(DRAFT)
+  logoUrl                 String?
+  logoMimeType            String?
+  logoFileName            String?
+  status                  OrganizationStatus @default(DRAFT)
   onboardingCompletedAt   DateTime?
   user                    User?
-  customers              Customer[]
-  categories             Category[]
+  customers               Customer[]
+  categories              Category[]
   products                Product[]
-  sales                  Sale[]
-  createdAt              DateTime           @default(now())
-  updatedAt              DateTime           @updatedAt
+  sales                   Sale[]
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
 }
 
 model Category {
   id             String       @id @default(cuid())
-  organizationId  String
-  name            String
-  status          String       @default("ACTIVE")
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  organizationId String
+  name           String
+  status         String       @default("ACTIVE")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 model Product {
-  id            String       @id @default(cuid())
+  id             String       @id @default(cuid())
   organizationId String
-  name          String
-  sku           String
-  category      String
-  sellingPrice  Decimal      @db.Decimal(12, 2)
-  currentStock  Int          @default(0)
-  reorderLevel  Int          @default(0)
-  status        String       @default("ACTIVE")
-  organization  Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  saleItems     SaleItem[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  name           String
+  sku            String
+  barcode        String?
+  category       String
+  sellingPrice   Decimal      @db.Decimal(12, 2)
+  costPrice      Decimal      @default(0.0) @db.Decimal(12, 2)
+  isService      Boolean      @default(false)
+  currentStock   Int          @default(0)
+  reorderLevel   Int          @default(0)
+  unitType       String       @default("PCS")
+  taxRate        Decimal      @default(0.0) @db.Decimal(5, 2)
+  status         String       @default("ACTIVE")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  saleItems      SaleItem[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   @@unique([organizationId, sku])
+  @@index([organizationId, status])
+  @@index([organizationId, category])
 }
 
 model Customer {
-  id            String       @id @default(cuid())
+  id             String       @id @default(cuid())
   organizationId String
-  name          String
-  mobile        String
-  organization  Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  sales         Sale[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  name           String
+  mobile         String
+  email          String?
+  gst            String?
+  address        String?
+  vehicleDetails String?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sales          Sale[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId, mobile])
 }
 
 model Sale {
-  id            String       @id @default(cuid())
+  id             String       @id @default(cuid())
   organizationId String
-  customerId    String?
-  subtotal      Decimal      @db.Decimal(12, 2)
-  discount      Decimal      @db.Decimal(12, 2)
-  tax           Decimal      @db.Decimal(12, 2)
-  grandTotal    Decimal      @db.Decimal(12, 2)
-  status        SaleStatus   @default(DRAFT)
-  organization  Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  customer      Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
-  items         SaleItem[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  saleNumber     String
+  type           SaleType     @default(INVOICE)
+  customerId     String?
+  subtotal       Decimal      @db.Decimal(12, 2)
+  discount       Decimal      @default(0.0) @db.Decimal(12, 2)
+  tax            Decimal      @default(0.0) @db.Decimal(12, 2)
+  grandTotal     Decimal      @db.Decimal(12, 2)
+  paidAmount     Decimal      @default(0.0) @db.Decimal(12, 2)
+  paymentMethod  String       @default("CASH")
+  status         SaleStatus   @default(COMPLETED)
+  vehicleNotes   String?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer       Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  items          SaleItem[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([organizationId, saleNumber])
+  @@index([organizationId, createdAt])
+  @@index([organizationId, status])
 }
 
 model SaleItem {
-  id            String   @id @default(cuid())
-  saleId        String
-  productId     String
-  quantity      Int
-  sellingPrice  Decimal  @db.Decimal(12, 2)
-  subtotal      Decimal  @db.Decimal(12, 2)
-  sale          Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  product       Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(cuid())
+  saleId       String
+  productId    String
+  productName  String
+  quantity     Int
+  sellingPrice Decimal  @db.Decimal(12, 2)
+  discount     Decimal  @default(0.0) @db.Decimal(12, 2)
+  subtotal     Decimal  @db.Decimal(12, 2)
+  sale         Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@index([saleId])
   @@index([productId])

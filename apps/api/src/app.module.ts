@@ -9,10 +9,12 @@ import { ApiExceptionFilter } from './common/api-exception.filter';
 import { InventoryModule } from './inventory/inventory.module';
 import { ZodValidationPipe } from './common/zod-validation.pipe';
 import { AuthModule } from './auth/auth.module';
+import { CustomersModule } from './customers/customers.module';
 import { OnboardingModule } from './onboarding/onboarding.module';
 import { OrganizationModule } from './organization/organization.module';
 import { ProductsModule } from './products/products.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { SalesModule } from './sales/sales.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -27,6 +29,8 @@ import { UsersModule } from './users/users.module';
     InventoryModule,
     ProductsModule,
     CategoriesModule,
+    CustomersModule,
+    SalesModule,
   ],
   controllers: [AppController],
   providers: [

@@ -459,10 +459,7 @@ export class AuthService {
     };
   }
 
-  async changePassword(
-    userId: string,
-    input: ChangePasswordInput,
-  ): Promise<{ message: string }> {
+  async changePassword(userId: string, input: ChangePasswordInput): Promise<{ message: string }> {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw new UnauthorizedException({

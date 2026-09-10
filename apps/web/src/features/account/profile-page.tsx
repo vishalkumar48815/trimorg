@@ -118,7 +118,10 @@ export function ProfilePage(): ReactElement {
           description="Update the name and mobile number associated with your account."
         />
 
-        <SectionCard title="Personal details" description="Your email is used to sign in and can't be changed here.">
+        <SectionCard
+          title="Personal details"
+          description="Your email is used to sign in and can't be changed here."
+        >
           <form
             className="space-y-6"
             onSubmit={form.handleSubmit(async (values) => {

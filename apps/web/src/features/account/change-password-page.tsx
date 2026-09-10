@@ -12,7 +12,10 @@ import { PageContainer } from '@/shell/page-container';
 import { ApiRequestError } from '@/lib/api';
 import { AccountToast } from '@/features/account/account-toast';
 import { changePassword } from '@/features/account/account.api';
-import { changePasswordSchema, type ChangePasswordValues } from '@/features/account/account.schemas';
+import {
+  changePasswordSchema,
+  type ChangePasswordValues,
+} from '@/features/account/account.schemas';
 
 const TOAST_TIMEOUT_MS = 2800;
 

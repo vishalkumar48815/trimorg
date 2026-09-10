@@ -63,7 +63,8 @@ export class OrganizationService {
         businessType: input.businessType,
         gst: input.gst && input.gst.length > 0 ? input.gst : null,
         addressLine1: input.addressLine1,
-        addressLine2: input.addressLine2 && input.addressLine2.length > 0 ? input.addressLine2 : null,
+        addressLine2:
+          input.addressLine2 && input.addressLine2.length > 0 ? input.addressLine2 : null,
         city: input.city,
         state: input.state,
         postalCode: input.postalCode,
@@ -72,15 +73,18 @@ export class OrganizationService {
         timezone: input.timezone,
         // Logo is a placeholder upload — preserve the existing value if the
         // caller didn't send a new one, rather than clearing it out.
-        logoUrl: input.logoDataUrl && input.logoDataUrl.length > 0
-          ? input.logoDataUrl
-          : organization.logoUrl,
-        logoFileName: input.logoFileName && input.logoFileName.length > 0
-          ? input.logoFileName
-          : organization.logoFileName,
-        logoMimeType: input.logoMimeType && input.logoMimeType.length > 0
-          ? input.logoMimeType
-          : organization.logoMimeType,
+        logoUrl:
+          input.logoDataUrl && input.logoDataUrl.length > 0
+            ? input.logoDataUrl
+            : organization.logoUrl,
+        logoFileName:
+          input.logoFileName && input.logoFileName.length > 0
+            ? input.logoFileName
+            : organization.logoFileName,
+        logoMimeType:
+          input.logoMimeType && input.logoMimeType.length > 0
+            ? input.logoMimeType
+            : organization.logoMimeType,
       },
     });
 

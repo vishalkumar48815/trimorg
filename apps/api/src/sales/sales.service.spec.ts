@@ -120,6 +120,7 @@ const mockPrismaService = {
     create: jest.fn().mockResolvedValue(mockCreatedSale),
     findMany: jest.fn().mockResolvedValue([mockCreatedSale]),
     findFirst: jest.fn().mockResolvedValue(mockCreatedSale),
+    update: jest.fn().mockResolvedValue({ ...mockCreatedSale, type: 'INVOICE', saleNumber: 'INV-20260910-5678' }),
   },
   stockMovement: {
     create: jest.fn().mockResolvedValue({}),
@@ -169,6 +170,40 @@ describe('SalesService', () => {
     expect(result.grandTotal).toBe('1062');
     expect(result.paymentMethod).toBe('UPI');
     expect(result.items.length).toBe(2);
+  });
+
+  it('should create quotation without decrementing stock', async () => {
+    const result = await service.createSale(mockUser, {
+      customerId: 'cust-1',
+      type: 'QUOTATION',
+      discount: 0,
+      tax: 180,
+      paidAmount: 0,
+      paymentMethod: 'CASH',
+      items: [
+        { productId: 'prod-1', quantity: 2, sellingPrice: 500, discount: 0 },
+      ],
+    });
+
+    expect(result).toBeDefined();
+    expect(mockPrismaService.sale.create).toHaveBeenCalled();
+  });
+
+  it('should convert quotation to completed invoice', async () => {
+    mockPrismaService.sale.findFirst.mockResolvedValue({
+      ...mockCreatedSale,
+      type: 'QUOTATION',
+      items: [
+        {
+          ...mockCreatedSale.items[0],
+          product: mockProduct,
+        },
+      ],
+    });
+
+    const converted = await service.convertQuotationToInvoice(mockUser, 'sale-1');
+    expect(converted.type).toBe('INVOICE');
+    expect(mockPrismaService.stockMovement.create).toHaveBeenCalled();
   });
 
   it('should throw BadRequestException if physical product has insufficient stock', async () => {

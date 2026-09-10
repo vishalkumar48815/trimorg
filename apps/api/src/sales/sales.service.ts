@@ -157,17 +157,21 @@ export class SalesService {
     const discount = input.discount ?? 0;
     const tax = input.tax ?? 0;
     const grandTotal = Math.max(0, subtotal - discount + tax);
-    const paidAmount = input.paidAmount !== undefined ? input.paidAmount : grandTotal;
+    const isInvoice = input.type === 'INVOICE';
+    const isQuotation = input.type === 'QUOTATION';
+    const isOrder = input.type === 'ORDER';
+    const paidAmount = input.paidAmount !== undefined ? input.paidAmount : (isQuotation ? 0 : grandTotal);
 
-    // Generate readable sale number: INV-YYYYMMDD-XXXX
+    // Generate readable reference number
     const now = new Date();
     const datePrefix = now.toISOString().slice(0, 10).replace(/-/g, '');
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const saleNumber = `INV-${datePrefix}-${randomSuffix}`;
+    const prefix = isQuotation ? 'QT' : isOrder ? 'ORD' : 'INV';
+    const saleNumber = `${prefix}-${datePrefix}-${randomSuffix}`;
 
     // Execute atomic transaction
     const createdSale = await this.prisma.$transaction(async (tx) => {
-      // Create Sale
+      // Create Sale / Quotation
       const sale = await tx.sale.create({
         data: {
           organizationId,
@@ -221,11 +225,80 @@ export class SalesService {
         },
       });
 
+      // If this is an actual INVOICE, decrement physical stock and record StockMovement audit logs
+      if (isInvoice) {
+        for (const item of preparedItems) {
+          if (!item.isService) {
+            const product = products.find((p) => p.id === item.productId);
+            const previousStock = product?.currentStock ?? 0;
+            const newStock = previousStock - item.quantity;
+
+            await tx.product.update({
+              where: { id: item.productId },
+              data: {
+                currentStock: newStock,
+              },
+            });
+
+            await tx.stockMovement.create({
+              data: {
+                organizationId,
+                productId: item.productId,
+                type: 'SALE',
+                quantityDelta: -item.quantity,
+                previousStock,
+                newStock,
+                referenceId: sale.id,
+                reason: `POS Sale #${saleNumber}`,
+              },
+            });
+          }
+        }
+      }
+
+      return sale;
+    });
+
+    return serializeSaleDetail(createdSale);
+  }
+
+  async convertQuotationToInvoice(user: RequestUser, id: SaleIdInput['id']): Promise<SaleDetail> {
+    const organizationId = this.requireOrganizationId(user);
+
+    const quotation = await this.prisma.sale.findFirst({
+      where: {
+        id,
+        organizationId,
+        type: 'QUOTATION',
+      },
+      include: {
+        items: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+
+    if (!quotation) {
+      throw new NotFoundException({
+        code: 'QuotationNotFound',
+        message: 'Quotation not found.',
+      });
+    }
+
+    // Generate readable invoice number: INV-YYYYMMDD-XXXX
+    const now = new Date();
+    const datePrefix = now.toISOString().slice(0, 10).replace(/-/g, '');
+    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+    const invoiceNumber = `INV-${datePrefix}-${randomSuffix}`;
+
+    // Execute atomic transaction
+    const convertedSale = await this.prisma.$transaction(async (tx) => {
       // Decrement stock and record StockMovement audit logs for physical items
-      for (const item of preparedItems) {
-        if (!item.isService) {
-          const product = products.find((p) => p.id === item.productId);
-          const previousStock = product?.currentStock ?? 0;
+      for (const item of quotation.items) {
+        if (!item.product.isService) {
+          const previousStock = item.product.currentStock;
           const newStock = previousStock - item.quantity;
 
           await tx.product.update({
@@ -243,17 +316,53 @@ export class SalesService {
               quantityDelta: -item.quantity,
               previousStock,
               newStock,
-              referenceId: sale.id,
-              reason: `POS Sale #${saleNumber}`,
+              referenceId: quotation.id,
+              reason: `Converted from Quotation #${quotation.saleNumber}`,
             },
           });
         }
       }
 
-      return sale;
+      // Update Quotation to completed Invoice
+      const updated = await tx.sale.update({
+        where: { id: quotation.id },
+        data: {
+          type: 'INVOICE',
+          saleNumber: invoiceNumber,
+          status: 'COMPLETED',
+        },
+        include: {
+          customer: {
+            select: { id: true, name: true, mobile: true },
+          },
+          items: {
+            include: {
+              product: {
+                select: { name: true },
+              },
+            },
+          },
+          organization: {
+            select: {
+              businessName: true,
+              ownerName: true,
+              mobile: true,
+              gst: true,
+              addressLine1: true,
+              addressLine2: true,
+              city: true,
+              state: true,
+              postalCode: true,
+              currencyCode: true,
+            },
+          },
+        },
+      });
+
+      return updated;
     });
 
-    return serializeSaleDetail(createdSale);
+    return serializeSaleDetail(convertedSale);
   }
 
   async getSales(user: RequestUser, query: SalesQueryInput): Promise<SaleListItem[]> {

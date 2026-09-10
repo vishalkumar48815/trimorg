@@ -26,7 +26,9 @@ export function InvoicesPage(): ReactElement {
     refetchOnWindowFocus: false,
   });
 
-  const sales = useMemo(() => salesQuery.data ?? [], [salesQuery.data]);
+  const sales = useMemo(() => {
+    return (salesQuery.data ?? []).filter((s) => s.type === 'INVOICE');
+  }, [salesQuery.data]);
 
   const filteredSales = useMemo(() => {
     const q = search.trim().toLowerCase();

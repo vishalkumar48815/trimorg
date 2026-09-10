@@ -34,3 +34,10 @@ export async function fetchSaleById(id: string): Promise<SaleRecord> {
     auth: true,
   });
 }
+
+export async function convertQuotationToInvoice(id: string): Promise<SaleRecord> {
+  return apiRequest<SaleRecord>(`/sales/${id}/convert-to-invoice`, {
+    method: 'POST',
+    auth: true,
+  });
+}

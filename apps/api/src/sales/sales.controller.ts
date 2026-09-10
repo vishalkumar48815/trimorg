@@ -48,6 +48,18 @@ export class SalesController {
     return createSuccessResponse(sale);
   }
 
+  @Post(':id/convert-to-invoice')
+  async convertQuotationToInvoice(
+    @CurrentUser() user: RequestUser | null,
+    @Param() params: SaleIdDto,
+  ): Promise<ApiSuccess<SaleDetail>> {
+    const invoice = await this.salesService.convertQuotationToInvoice(
+      this.requireUser(user),
+      params.id,
+    );
+    return createSuccessResponse(invoice);
+  }
+
   private requireUser(user: RequestUser | null): RequestUser {
     if (!user) {
       throw new UnauthorizedException({

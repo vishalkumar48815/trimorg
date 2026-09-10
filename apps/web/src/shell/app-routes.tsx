@@ -11,7 +11,7 @@ import { DashboardPage } from '@/features/dashboard/dashboard-page';
 import { InventoryPage } from '@/features/inventory';
 import { ProductsPage } from '@/features/products/products-page';
 import { GoodsReceivedPage, PurchaseOrdersPage } from '@/features/purchases';
-import { InvoicesPage, NewSalePage } from '@/features/sales';
+import { InvoicesPage, NewSalePage, OrdersPage, QuotationsPage } from '@/features/sales';
 import { SuppliersPage } from '@/features/suppliers';
 
 const DASHBOARD_PATH = '/dashboard';
@@ -22,6 +22,8 @@ const SUPPLIERS_PATH = '/business/suppliers';
 const INVENTORY_PATH = '/business/inventory';
 const SALES_POS_PATH = '/sales/pos';
 const SALES_INVOICES_PATH = '/sales/invoices';
+const SALES_QUOTATIONS_PATH = '/sales/quotations';
+const SALES_ORDERS_PATH = '/sales/orders';
 const PURCHASES_PO_PATH = '/purchases/purchase-orders';
 const PURCHASES_GRN_PATH = '/purchases/goods-received';
 
@@ -34,6 +36,8 @@ const EXPLICIT_ROUTES = new Set([
   INVENTORY_PATH,
   SALES_POS_PATH,
   SALES_INVOICES_PATH,
+  SALES_QUOTATIONS_PATH,
+  SALES_ORDERS_PATH,
   PURCHASES_PO_PATH,
   PURCHASES_GRN_PATH,
 ]);
@@ -56,6 +60,8 @@ export function AppRoutes() {
       <Route path={INVENTORY_PATH} element={<InventoryPage />} />
       <Route path={SALES_POS_PATH} element={<NewSalePage />} />
       <Route path={SALES_INVOICES_PATH} element={<InvoicesPage />} />
+      <Route path={SALES_QUOTATIONS_PATH} element={<QuotationsPage />} />
+      <Route path={SALES_ORDERS_PATH} element={<OrdersPage />} />
       <Route path={PURCHASES_PO_PATH} element={<PurchaseOrdersPage />} />
       <Route path={PURCHASES_GRN_PATH} element={<GoodsReceivedPage />} />
       {/* Account routes are reachable only via the User Menu, not the sidebar */}

@@ -43,7 +43,11 @@ export const tableRows = [
 
 export const typographySamples = [
   { label: 'Display', className: 'text-5xl font-semibold tracking-tight sm:text-6xl', icon: Type },
-  { label: 'Heading', className: 'text-3xl font-semibold tracking-tight sm:text-4xl', icon: Sparkles },
+  {
+    label: 'Heading',
+    className: 'text-3xl font-semibold tracking-tight sm:text-4xl',
+    icon: Sparkles,
+  },
   { label: 'Section', className: 'text-2xl font-semibold tracking-tight', icon: Boxes },
   { label: 'Body', className: 'text-base leading-7 text-muted-foreground', icon: BarChart3 },
   { label: 'Caption', className: 'text-sm text-muted-foreground', icon: CheckCircle2 },

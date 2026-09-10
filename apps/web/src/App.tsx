@@ -42,7 +42,8 @@ export function App(): ReactElement {
   const location = useLocation();
   const { isAuthenticated, isLoading, isOnboardingComplete } = useAuth();
   const isPublicRoute = PUBLIC_ROUTES.has(location.pathname);
-  const isOnboardingRoute = location.pathname === '/onboarding' || location.pathname === '/onboarding/business';
+  const isOnboardingRoute =
+    location.pathname === '/onboarding' || location.pathname === '/onboarding/business';
   const redirectTarget = isOnboardingComplete ? '/dashboard' : '/onboarding/business';
 
   if (isLoading && !isPublicRoute) {

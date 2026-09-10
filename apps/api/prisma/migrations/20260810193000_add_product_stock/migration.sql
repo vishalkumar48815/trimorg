@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Product"
+ADD COLUMN "currentStock" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN "reorderLevel" INTEGER NOT NULL DEFAULT 0;

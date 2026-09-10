@@ -71,7 +71,9 @@ export function LoginPage(): ReactElement {
         // Keep the optimistic session cache so navigation and refresh remain stable.
       }
 
-      navigate(session.user.onboardingCompletedAt ? '/dashboard' : '/onboarding/business', { replace: true });
+      navigate(session.user.onboardingCompletedAt ? '/dashboard' : '/onboarding/business', {
+        replace: true,
+      });
     },
   });
 
@@ -102,7 +104,9 @@ export function LoginPage(): ReactElement {
               error instanceof ApiRequestError &&
               (error.code === 'EMAIL_NOT_VERIFIED' || error.requiresVerification === true)
             ) {
-              navigate(`/verify-email?email=${encodeURIComponent(values.email)}`, { replace: true });
+              navigate(`/verify-email?email=${encodeURIComponent(values.email)}`, {
+                replace: true,
+              });
               return;
             }
 
@@ -125,7 +129,13 @@ export function LoginPage(): ReactElement {
               className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
               aria-hidden="true"
             />
-            <Input id="login-email" type="email" placeholder="name@company.com" className="pl-9" {...form.register('email')} />
+            <Input
+              id="login-email"
+              type="email"
+              placeholder="name@company.com"
+              className="pl-9"
+              {...form.register('email')}
+            />
           </div>
           {form.formState.errors.email ? (
             <p className="text-sm text-danger">{form.formState.errors.email.message}</p>
@@ -148,10 +158,14 @@ export function LoginPage(): ReactElement {
               type="button"
               variant="ghost"
               size="sm"
-              className="absolute right-1 top-1/2 h-8 -translate-y-1/2 gap-2 px-3 text-muted-foreground"
+              className="absolute inset-y-0 right-1 my-auto h-8 gap-2 px-3 text-muted-foreground"
               onClick={() => setShowPassword((current) => !current)}
             >
-              {showPassword ? <EyeOff className="h-4 w-4" aria-hidden="true" /> : <Eye className="h-4 w-4" aria-hidden="true" />}
+              {showPassword ? (
+                <EyeOff className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <Eye className="h-4 w-4" aria-hidden="true" />
+              )}
               {showPassword ? 'Hide' : 'Show'}
             </Button>
           </div>

@@ -47,7 +47,9 @@ export async function saveBusinessStep(input: BusinessStepInput): Promise<Onboar
   });
 }
 
-export async function saveOrganizationStep(input: OrganizationStepInput): Promise<OnboardingStatus> {
+export async function saveOrganizationStep(
+  input: OrganizationStepInput,
+): Promise<OnboardingStatus> {
   return apiRequest<OnboardingStatus>('/onboarding/organization', {
     method: 'POST',
     body: input,

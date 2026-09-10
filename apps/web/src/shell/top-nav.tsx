@@ -1,8 +1,8 @@
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { UserMenu } from '@/components/user-menu/user-menu';
 import { Breadcrumb } from '@/shell/breadcrumb';
 import { ThemeToggle } from '@/shell/theme-toggle';
-import { UserMenu } from '@/shell/user-menu';
 
 interface TopNavProps {
   onOpenMobileDrawer: () => void;

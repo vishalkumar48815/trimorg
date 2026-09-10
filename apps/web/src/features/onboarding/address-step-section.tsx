@@ -84,7 +84,10 @@ export function AddressStepSection({
   if (statusQuery.isError) {
     return (
       <main className="mx-auto flex min-h-svh w-full max-w-5xl items-center justify-center px-4 py-10">
-        <SectionCard title="Unable to load business setup" description={getErrorMessage(statusQuery.error)}>
+        <SectionCard
+          title="Unable to load business setup"
+          description={getErrorMessage(statusQuery.error)}
+        >
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button onClick={() => void statusQuery.refetch()}>Try again</Button>
             <Button variant="outline" onClick={() => void logoutUser()}>
@@ -112,7 +115,10 @@ export function AddressStepSection({
         />
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_360px]">
-          <SectionCard title="Step 2 · Business address" description="Load and update the saved address details.">
+          <SectionCard
+            title="Step 2 · Business address"
+            description="Load and update the saved address details."
+          >
             <form
               className="space-y-6"
               onSubmit={form.handleSubmit(async (values) => {
@@ -137,7 +143,9 @@ export function AddressStepSection({
                   {...form.register('addressLine1')}
                 />
                 {form.formState.errors.addressLine1 ? (
-                  <p className="text-sm text-danger">{form.formState.errors.addressLine1.message}</p>
+                  <p className="text-sm text-danger">
+                    {form.formState.errors.addressLine1.message}
+                  </p>
                 ) : null}
               </div>
 
@@ -152,7 +160,9 @@ export function AddressStepSection({
                   {...form.register('addressLine2')}
                 />
                 {form.formState.errors.addressLine2 ? (
-                  <p className="text-sm text-danger">{form.formState.errors.addressLine2.message}</p>
+                  <p className="text-sm text-danger">
+                    {form.formState.errors.addressLine2.message}
+                  </p>
                 ) : null}
               </div>
 
@@ -161,7 +171,12 @@ export function AddressStepSection({
                   <label className="text-sm font-medium text-foreground" htmlFor="country">
                     Country <span className="text-danger">*</span>
                   </label>
-                  <Input id="country" type="text" placeholder="India" {...form.register('country')} />
+                  <Input
+                    id="country"
+                    type="text"
+                    placeholder="India"
+                    {...form.register('country')}
+                  />
                   {form.formState.errors.country ? (
                     <p className="text-sm text-danger">{form.formState.errors.country.message}</p>
                   ) : null}
@@ -171,7 +186,12 @@ export function AddressStepSection({
                   <label className="text-sm font-medium text-foreground" htmlFor="state">
                     State <span className="text-danger">*</span>
                   </label>
-                  <Input id="state" type="text" placeholder="Maharashtra" {...form.register('state')} />
+                  <Input
+                    id="state"
+                    type="text"
+                    placeholder="Maharashtra"
+                    {...form.register('state')}
+                  />
                   {form.formState.errors.state ? (
                     <p className="text-sm text-danger">{form.formState.errors.state.message}</p>
                   ) : null}
@@ -193,9 +213,16 @@ export function AddressStepSection({
                   <label className="text-sm font-medium text-foreground" htmlFor="pincode">
                     Pincode <span className="text-danger">*</span>
                   </label>
-                  <Input id="pincode" type="text" placeholder="400001" {...form.register('postalCode')} />
+                  <Input
+                    id="pincode"
+                    type="text"
+                    placeholder="400001"
+                    {...form.register('postalCode')}
+                  />
                   {form.formState.errors.postalCode ? (
-                    <p className="text-sm text-danger">{form.formState.errors.postalCode.message}</p>
+                    <p className="text-sm text-danger">
+                      {form.formState.errors.postalCode.message}
+                    </p>
                   ) : null}
                 </div>
               </div>
@@ -218,10 +245,14 @@ export function AddressStepSection({
             </form>
           </SectionCard>
 
-          <SectionCard title="Step 2 details" description="Address values stay available after refresh.">
+          <SectionCard
+            title="Step 2 details"
+            description="Address values stay available after refresh."
+          >
             <div className="space-y-4 text-sm text-muted-foreground">
               <p>
-                Step 2 stores only the address fields and keeps them ready for later onboarding steps.
+                Step 2 stores only the address fields and keeps them ready for later onboarding
+                steps.
               </p>
               <div className="space-y-3">
                 {[

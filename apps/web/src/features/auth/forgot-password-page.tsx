@@ -102,7 +102,13 @@ export function ForgotPasswordPage(): ReactElement {
               className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
               aria-hidden="true"
             />
-            <Input id="forgot-email" type="email" placeholder="name@company.com" className="pl-9" {...form.register('email')} />
+            <Input
+              id="forgot-email"
+              type="email"
+              placeholder="name@company.com"
+              className="pl-9"
+              {...form.register('email')}
+            />
           </div>
           {form.formState.errors.email ? (
             <p className="text-sm text-danger">{form.formState.errors.email.message}</p>

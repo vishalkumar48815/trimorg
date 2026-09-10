@@ -31,9 +31,7 @@ export function PrivacyPolicyPage(): ReactElement {
                   Any future implementation would use information to operate the product, provide
                   support, and improve the user experience.
                 </p>
-                <p>
-                  The final policy text will be reviewed before launch.
-                </p>
+                <p>The final policy text will be reviewed before launch.</p>
               </>
             ),
           },

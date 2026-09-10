@@ -102,7 +102,12 @@ export function ResetPasswordPage(): ReactElement {
           <label className="text-sm font-medium text-foreground" htmlFor="reset-token">
             Reset Token
           </label>
-          <Input id="reset-token" type="text" placeholder="Paste your reset token" {...form.register('token')} />
+          <Input
+            id="reset-token"
+            type="text"
+            placeholder="Paste your reset token"
+            {...form.register('token')}
+          />
           {form.formState.errors.token ? (
             <p className="text-sm text-danger">{form.formState.errors.token.message}</p>
           ) : null}
@@ -112,7 +117,12 @@ export function ResetPasswordPage(): ReactElement {
           <label className="text-sm font-medium text-foreground" htmlFor="reset-password">
             New Password
           </label>
-          <Input id="reset-password" type="password" placeholder="Enter a new password" {...form.register('password')} />
+          <Input
+            id="reset-password"
+            type="password"
+            placeholder="Enter a new password"
+            {...form.register('password')}
+          />
           {form.formState.errors.password ? (
             <p className="text-sm text-danger">{form.formState.errors.password.message}</p>
           ) : null}

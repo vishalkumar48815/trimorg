@@ -32,12 +32,26 @@ export const resetPasswordSchema = z
 
 export const verifyEmailSchema = z.object({
   email: z.string().trim().email('Enter a valid email address.').toLowerCase(),
-  otp: z.string().trim().regex(/^\d{6}$/, 'Enter a valid 6-digit OTP.'),
+  otp: z
+    .string()
+    .trim()
+    .regex(/^\d{6}$/, 'Enter a valid 6-digit OTP.'),
 });
 
 export const resendOtpSchema = z.object({
   email: z.string().trim().email('Enter a valid email address.').toLowerCase(),
 });
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Current password is required.'),
+    newPassword: passwordSchema,
+    confirmPassword: passwordSchema,
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Passwords do not match.',
+    path: ['confirmPassword'],
+  });
 
 export class RegisterDto {
   static schema = registerSchema;
@@ -77,9 +91,17 @@ export class ResendOtpDto {
   email!: string;
 }
 
+export class ChangePasswordDto {
+  static schema = changePasswordSchema;
+  currentPassword!: string;
+  newPassword!: string;
+  confirmPassword!: string;
+}
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
 export type ResendOtpInput = z.infer<typeof resendOtpSchema>;
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;

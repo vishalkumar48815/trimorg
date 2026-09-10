@@ -1,5 +1,10 @@
 import type { Response } from 'express';
-import { ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_TTL_SECONDS, REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_TTL_SECONDS } from './auth-cookie.constants';
+import {
+  ACCESS_TOKEN_COOKIE,
+  ACCESS_TOKEN_TTL_SECONDS,
+  REFRESH_TOKEN_COOKIE,
+  REFRESH_TOKEN_TTL_SECONDS,
+} from './auth-cookie.constants';
 
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
@@ -9,7 +14,11 @@ const COOKIE_BASE_OPTIONS = {
   sameSite: 'lax' as const,
 };
 
-export function setAuthCookies(response: Response, accessToken: string, refreshToken: string): void {
+export function setAuthCookies(
+  response: Response,
+  accessToken: string,
+  refreshToken: string,
+): void {
   response.cookie(ACCESS_TOKEN_COOKIE, accessToken, {
     ...COOKIE_BASE_OPTIONS,
     path: '/',

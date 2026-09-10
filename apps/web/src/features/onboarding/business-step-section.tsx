@@ -86,7 +86,10 @@ export function BusinessStepSection({
   if (statusQuery.isError) {
     return (
       <main className="mx-auto flex min-h-svh w-full max-w-5xl items-center justify-center px-4 py-10">
-        <SectionCard title="Unable to load business setup" description={getErrorMessage(statusQuery.error)}>
+        <SectionCard
+          title="Unable to load business setup"
+          description={getErrorMessage(statusQuery.error)}
+        >
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button onClick={() => void statusQuery.refetch()}>Try again</Button>
             <Button variant="outline" onClick={() => void logoutUser()}>
@@ -149,7 +152,9 @@ export function BusinessStepSection({
                   />
                 </div>
                 {form.formState.errors.businessName ? (
-                  <p className="text-sm text-danger">{form.formState.errors.businessName.message}</p>
+                  <p className="text-sm text-danger">
+                    {form.formState.errors.businessName.message}
+                  </p>
                 ) : null}
               </div>
 
@@ -170,7 +175,9 @@ export function BusinessStepSection({
                   ))}
                 </select>
                 {form.formState.errors.businessType ? (
-                  <p className="text-sm text-danger">{form.formState.errors.businessType.message}</p>
+                  <p className="text-sm text-danger">
+                    {form.formState.errors.businessType.message}
+                  </p>
                 ) : null}
               </div>
 
@@ -196,8 +203,8 @@ export function BusinessStepSection({
           >
             <div className="space-y-4 text-sm text-muted-foreground">
               <p>
-                Trimorg stores the business record in your workspace so onboarding can continue with a
-                consistent identity.
+                Trimorg stores the business record in your workspace so onboarding can continue with
+                a consistent identity.
               </p>
               <div className="space-y-3">
                 {[

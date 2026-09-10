@@ -94,7 +94,10 @@ export function LandingPage(): ReactElement {
               <CardContent className="space-y-4 p-6">
                 <div className="grid gap-4 sm:grid-cols-2">
                   {['Products', 'Orders', 'Billing', 'Stock'].map((item) => (
-                    <div key={item} className="rounded-[16px] border border-border bg-background p-4">
+                    <div
+                      key={item}
+                      className="rounded-[16px] border border-border bg-background p-4"
+                    >
                       <div className="flex items-center gap-3">
                         <div className="flex size-10 items-center justify-center rounded-[14px] bg-muted text-muted-foreground">
                           <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
@@ -159,7 +162,9 @@ export function LandingPage(): ReactElement {
                         <Icon className="h-5 w-5" aria-hidden="true" />
                       </div>
                       <CardTitle className="text-lg">{item.title}</CardTitle>
-                      <CardDescription className="text-sm leading-6">{item.description}</CardDescription>
+                      <CardDescription className="text-sm leading-6">
+                        {item.description}
+                      </CardDescription>
                     </CardHeader>
                   </Card>
                 </PageReveal>
@@ -183,7 +188,9 @@ export function LandingPage(): ReactElement {
                   <CardHeader>
                     <p className="text-sm font-medium text-muted-foreground">Step {index + 1}</p>
                     <CardTitle className="text-lg">{item.title}</CardTitle>
-                    <CardDescription className="text-sm leading-6">{item.description}</CardDescription>
+                    <CardDescription className="text-sm leading-6">
+                      {item.description}
+                    </CardDescription>
                   </CardHeader>
                 </Card>
               </PageReveal>
@@ -211,7 +218,9 @@ export function LandingPage(): ReactElement {
                         <Icon className="h-5 w-5" aria-hidden="true" />
                       </div>
                       <CardTitle className="text-lg">{item.title}</CardTitle>
-                      <CardDescription className="text-sm leading-6">{item.description}</CardDescription>
+                      <CardDescription className="text-sm leading-6">
+                        {item.description}
+                      </CardDescription>
                     </CardHeader>
                   </Card>
                 </PageReveal>
@@ -237,7 +246,9 @@ export function LandingPage(): ReactElement {
                       {plan.name}
                     </p>
                     <CardTitle className="text-lg">Coming soon</CardTitle>
-                    <CardDescription className="text-sm leading-6">{plan.description}</CardDescription>
+                    <CardDescription className="text-sm leading-6">
+                      {plan.description}
+                    </CardDescription>
                   </CardHeader>
                 </Card>
               </PageReveal>

@@ -64,7 +64,9 @@ export function AuthLayout({
                         </div>
                         <div className="space-y-1">
                           <p className="text-sm font-medium text-foreground">{item.title}</p>
-                          <p className="text-sm leading-6 text-muted-foreground">{item.description}</p>
+                          <p className="text-sm leading-6 text-muted-foreground">
+                            {item.description}
+                          </p>
                         </div>
                       </div>
                     </PageReveal>

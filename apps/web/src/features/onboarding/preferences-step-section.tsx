@@ -97,7 +97,10 @@ export function PreferencesStepSection({
   if (statusQuery.isError) {
     return (
       <main className="mx-auto flex min-h-svh w-full max-w-5xl items-center justify-center px-4 py-10">
-        <SectionCard title="Unable to load business setup" description={getErrorMessage(statusQuery.error)}>
+        <SectionCard
+          title="Unable to load business setup"
+          description={getErrorMessage(statusQuery.error)}
+        >
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button onClick={() => void statusQuery.refetch()}>Try again</Button>
             <Button variant="outline" onClick={() => void logoutUser()}>
@@ -125,7 +128,10 @@ export function PreferencesStepSection({
         />
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_360px]">
-          <SectionCard title="Step 3 · Business preferences" description="Load and update the saved preferences.">
+          <SectionCard
+            title="Step 3 · Business preferences"
+            description="Load and update the saved preferences."
+          >
             <form
               className="space-y-6"
               onSubmit={form.handleSubmit(async (values) => {
@@ -155,7 +161,9 @@ export function PreferencesStepSection({
                   ))}
                 </select>
                 {form.formState.errors.currencyCode ? (
-                  <p className="text-sm text-danger">{form.formState.errors.currencyCode.message}</p>
+                  <p className="text-sm text-danger">
+                    {form.formState.errors.currencyCode.message}
+                  </p>
                 ) : null}
               </div>
 
@@ -163,14 +171,22 @@ export function PreferencesStepSection({
                 <label className="text-sm font-medium text-foreground" htmlFor="timezone">
                   Timezone <span className="text-danger">*</span>
                 </label>
-                <Input id="timezone" type="text" placeholder="Asia/Kolkata" {...form.register('timezone')} />
+                <Input
+                  id="timezone"
+                  type="text"
+                  placeholder="Asia/Kolkata"
+                  {...form.register('timezone')}
+                />
                 {form.formState.errors.timezone ? (
                   <p className="text-sm text-danger">{form.formState.errors.timezone.message}</p>
                 ) : null}
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground" htmlFor="financial-year-start">
+                <label
+                  className="text-sm font-medium text-foreground"
+                  htmlFor="financial-year-start"
+                >
                   Financial Year Start <span className="text-danger">*</span>
                 </label>
                 <select
@@ -185,7 +201,9 @@ export function PreferencesStepSection({
                   ))}
                 </select>
                 {form.formState.errors.financialYearStartMonth ? (
-                  <p className="text-sm text-danger">{form.formState.errors.financialYearStartMonth.message}</p>
+                  <p className="text-sm text-danger">
+                    {form.formState.errors.financialYearStartMonth.message}
+                  </p>
                 ) : null}
               </div>
 
@@ -207,10 +225,14 @@ export function PreferencesStepSection({
             </form>
           </SectionCard>
 
-          <SectionCard title="Step 3 details" description="Preferences stay available after refresh.">
+          <SectionCard
+            title="Step 3 details"
+            description="Preferences stay available after refresh."
+          >
             <div className="space-y-4 text-sm text-muted-foreground">
               <p>
-                This step stores the workspace preferences and marks onboarding as complete when saved.
+                This step stores the workspace preferences and marks onboarding as complete when
+                saved.
               </p>
               <div className="space-y-3">
                 {[

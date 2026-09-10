@@ -1,8 +1,5 @@
 import { apiRequest } from '@/lib/api';
-import type {
-  AuthMutationResult,
-  SessionData,
-} from '@/features/auth/auth.types';
+import type { AuthMutationResult, SessionData } from '@/features/auth/auth.types';
 
 export interface LoginInput {
   email: string;

@@ -41,7 +41,9 @@ export function PricingPage(): ReactElement {
                     {plan.name}
                   </p>
                   <CardTitle className="text-lg">Coming soon</CardTitle>
-                  <CardDescription className="text-sm leading-6">{plan.description}</CardDescription>
+                  <CardDescription className="text-sm leading-6">
+                    {plan.description}
+                  </CardDescription>
                 </CardHeader>
               </Card>
             </PageReveal>

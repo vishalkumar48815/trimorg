@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const businessTypes = [
+export const businessTypeOptions = [
   'Grocery Store',
   'Electrical Shop',
   'Hardware Store',
@@ -13,7 +13,7 @@ const businessTypes = [
   'Other',
 ] as const;
 
-const businessTypeSet = new Set<string>(businessTypes);
+const businessTypeSet = new Set<string>(businessTypeOptions);
 
 export const businessStepSchema = z.object({
   businessName: z.string().trim().min(2, 'Business name is required.').max(120),

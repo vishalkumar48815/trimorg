@@ -30,7 +30,9 @@ export function EmptyState({
         ) : null}
         <div className="space-y-2">
           <p className="text-lg font-semibold tracking-tight text-foreground">{title}</p>
-          <p className="max-w-md text-sm leading-6 text-muted-foreground sm:text-base">{description}</p>
+          <p className="max-w-md text-sm leading-6 text-muted-foreground sm:text-base">
+            {description}
+          </p>
         </div>
         {primaryAction || secondaryAction ? (
           <div className="flex flex-col items-center gap-3 sm:flex-row">

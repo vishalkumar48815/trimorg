@@ -50,7 +50,9 @@ export function FeaturesPage(): ReactElement {
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </div>
                     <CardTitle className="text-lg">{item.title}</CardTitle>
-                    <CardDescription className="text-sm leading-6">{item.description}</CardDescription>
+                    <CardDescription className="text-sm leading-6">
+                      {item.description}
+                    </CardDescription>
                   </CardHeader>
                 </Card>
               </PageReveal>

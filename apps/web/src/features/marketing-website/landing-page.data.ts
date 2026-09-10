@@ -1,4 +1,12 @@
-import { BarChart3, Boxes, ShieldCheck, Sparkles, Truck, Workflow, type LucideIcon } from 'lucide-react';
+import {
+  BarChart3,
+  Boxes,
+  ShieldCheck,
+  Sparkles,
+  Truck,
+  Workflow,
+  type LucideIcon,
+} from 'lucide-react';
 
 export interface FeatureItem {
   title: string;
@@ -43,22 +51,26 @@ export const featureItems: FeatureItem[] = [
 export const workItems: StepItem[] = [
   {
     title: 'Set up your structure',
-    description: 'Start with products, categories, customers, and the core entities your team uses every day.',
+    description:
+      'Start with products, categories, customers, and the core entities your team uses every day.',
   },
   {
     title: 'Run the day',
-    description: 'Use one workspace for sales, inventory, and fulfillment instead of scattered spreadsheets.',
+    description:
+      'Use one workspace for sales, inventory, and fulfillment instead of scattered spreadsheets.',
   },
   {
     title: 'Scale with control',
-    description: 'Add more workflows over time while keeping the interface predictable and easy to use.',
+    description:
+      'Add more workflows over time while keeping the interface predictable and easy to use.',
   },
 ];
 
 export const benefitItems: BenefitItem[] = [
   {
     title: 'Clearer visibility',
-    description: 'See the business through a single operating surface instead of disconnected tools.',
+    description:
+      'See the business through a single operating surface instead of disconnected tools.',
     icon: ShieldCheck,
   },
   {

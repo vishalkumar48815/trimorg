@@ -22,6 +22,7 @@ import type {
   UserRecord,
 } from './auth.types';
 import type {
+  ChangePasswordInput,
   ForgotPasswordInput,
   LoginInput,
   RegisterInput,
@@ -428,7 +429,11 @@ export class AuthService {
   }
 
   async resetPassword(input: ResetPasswordInput): Promise<{ message: string }> {
-    const user = await this.findUserByToken('passwordResetTokenHash', 'passwordResetExpiresAt', input.token);
+    const user = await this.findUserByToken(
+      'passwordResetTokenHash',
+      'passwordResetExpiresAt',
+      input.token,
+    );
     if (!user) {
       throw new BadRequestException({
         code: 'PasswordResetTokenInvalid',
@@ -454,6 +459,44 @@ export class AuthService {
     };
   }
 
+  async changePassword(
+    userId: string,
+    input: ChangePasswordInput,
+  ): Promise<{ message: string }> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new UnauthorizedException({
+        code: 'Unauthorized',
+        message: 'Authentication is required.',
+      });
+    }
+
+    const isCurrentPasswordValid = await verifyPassword(user.passwordHash, input.currentPassword);
+    if (!isCurrentPasswordValid) {
+      throw new BadRequestException({
+        code: 'InvalidCurrentPassword',
+        message: 'Current password is incorrect.',
+      });
+    }
+
+    const passwordHash = await hashPassword(input.newPassword);
+
+    // Mirrors resetPassword: invalidate the refresh token so other sessions require
+    // a fresh login, without forcing an abrupt logout of the current session.
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash,
+        refreshTokenHash: null,
+        refreshTokenExpiresAt: null,
+      },
+    });
+
+    return {
+      message: 'Password updated successfully.',
+    };
+  }
+
   async verifyEmail(input: VerifyEmailInput): Promise<{ message: string }> {
     const user = await this.prisma.user.findUnique({
       where: { email: input.email },
@@ -461,7 +504,11 @@ export class AuthService {
     });
 
     if (user && !user.isEmailVerified) {
-      this.assertVerificationCodeIsValid(user.emailVerificationTokenHash, user.emailVerificationExpiresAt, input.otp);
+      this.assertVerificationCodeIsValid(
+        user.emailVerificationTokenHash,
+        user.emailVerificationExpiresAt,
+        input.otp,
+      );
 
       await this.prisma.user.update({
         where: { id: user.id },

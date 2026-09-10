@@ -52,12 +52,14 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 async function parseEnvelope<T>(response: Response): Promise<T> {
-  const body = (await response.json().catch(() => null)) as ApiEnvelope<T> | ApiErrorEnvelope | null;
+  const body = (await response.json().catch(() => null)) as
+    ApiEnvelope<T> | ApiErrorEnvelope | null;
 
   if (!response.ok) {
-    const error = isRecord(body) && 'error' in body && isRecord(body.error)
-      ? (body.error as ApiErrorPayload)
-      : { code: 'RequestFailed', message: response.statusText || 'Request failed.' };
+    const error =
+      isRecord(body) && 'error' in body && isRecord(body.error)
+        ? (body.error as ApiErrorPayload)
+        : { code: 'RequestFailed', message: response.statusText || 'Request failed.' };
 
     throw new ApiRequestError(
       response.status,

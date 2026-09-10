@@ -1,4 +1,11 @@
-import { Catch, ExceptionFilter, ArgumentsHost, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import {
+  Catch,
+  ExceptionFilter,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from '@nestjs/common';
 import type { Response } from 'express';
 import type { ApiError, ApiErrorPayload } from './api-response';
 
@@ -16,10 +23,14 @@ function normalizeErrorPayload(exception: unknown): ApiErrorPayload {
       const payload = response as Record<string, unknown>;
       const message = typeof payload.message === 'string' ? payload.message : exception.message;
       const code = typeof payload.code === 'string' ? payload.code : exception.name;
-      const details = typeof payload.details === 'object' ? (payload.details as Record<string, unknown>) : undefined;
-      const requiresVerification = typeof payload.requiresVerification === 'boolean'
-        ? payload.requiresVerification
-        : undefined;
+      const details =
+        typeof payload.details === 'object'
+          ? (payload.details as Record<string, unknown>)
+          : undefined;
+      const requiresVerification =
+        typeof payload.requiresVerification === 'boolean'
+          ? payload.requiresVerification
+          : undefined;
 
       return {
         code,
@@ -50,7 +61,8 @@ export class ApiExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status =
+      exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
     const payload = normalizeErrorPayload(exception);
 
     if (!(exception instanceof HttpException)) {

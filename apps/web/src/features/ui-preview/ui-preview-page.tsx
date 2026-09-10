@@ -1,6 +1,5 @@
 import type { ReactElement } from 'react';
 import { ArrowRight, Filter, LayoutGrid, Sparkles, Table2, Trash2 } from 'lucide-react';
-import { Table, Skeleton } from '@heroui/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -14,6 +13,10 @@ import {
   tableRows,
   typographySamples,
 } from '@/features/ui-preview/ui-preview.data';
+
+function SkeletonBar({ className }: { className: string }): ReactElement {
+  return <div className={`animate-pulse rounded-full bg-muted ${className}`} />;
+}
 
 export function UiPreviewPage(): ReactElement {
   return (
@@ -37,7 +40,12 @@ export function UiPreviewPage(): ReactElement {
         <SectionCard
           title="Buttons"
           description="Primary, secondary, outline, ghost, danger, and link states."
-          action={<Button size="sm" variant="ghost"><Filter className="h-4 w-4" aria-hidden="true" />Filters</Button>}
+          action={
+            <Button size="sm" variant="ghost">
+              <Filter className="h-4 w-4" aria-hidden="true" />
+              Filters
+            </Button>
+          }
         >
           <div className="flex flex-wrap gap-3">
             {buttonVariants.map((item) => (
@@ -57,11 +65,21 @@ export function UiPreviewPage(): ReactElement {
         >
           <div className="grid gap-4">
             {inputExamples.map((field) => (
-              <label key={field.id} className="grid gap-2 text-sm font-medium text-foreground" htmlFor={field.id}>
+              <label
+                key={field.id}
+                className="grid gap-2 text-sm font-medium text-foreground"
+                htmlFor={field.id}
+              >
                 {field.label}
                 <Input
                   id={field.id}
-                  type={field.label === 'Password' ? 'password' : field.label === 'Email' ? 'email' : 'search'}
+                  type={
+                    field.label === 'Password'
+                      ? 'password'
+                      : field.label === 'Email'
+                        ? 'email'
+                        : 'search'
+                  }
                   placeholder={`Enter ${field.label.toLowerCase()}`}
                 />
               </label>
@@ -71,7 +89,10 @@ export function UiPreviewPage(): ReactElement {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <SectionCard title="Cards" description="Large spacing, soft elevation, and minimal borders.">
+        <SectionCard
+          title="Cards"
+          description="Large spacing, soft elevation, and minimal borders."
+        >
           <div className="grid gap-4 sm:grid-cols-2">
             <Card>
               <CardHeader>
@@ -79,7 +100,7 @@ export function UiPreviewPage(): ReactElement {
                 <CardDescription>Clean container for app content.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="h-24 rounded-[16px] border border-border-subtle bg-surface-secondary" />
+                <div className="h-24 rounded-lg border border-border-subtle bg-surface-secondary" />
                 <p className="text-sm text-muted-foreground">
                   The surface is quiet, rounded, and ready for dense business workflows.
                 </p>
@@ -118,28 +139,35 @@ export function UiPreviewPage(): ReactElement {
         </SectionCard>
       </div>
 
-      <SectionCard title="Tables" description="A premium data table with crisp alignment and no noise.">
-        <Table variant="secondary" aria-label="Preview table" className="rounded-[16px] border border-border shadow-[var(--shadow-raised)]">
-          <Table.ScrollContainer className="rounded-[16px]">
-            <Table.Content aria-label="Preview table content" className="bg-transparent">
-              <Table.Header>
-                {tableColumns.map((column) => (
-                  <Table.Column key={column}>{column}</Table.Column>
+      <SectionCard
+        title="Tables"
+        description="A premium data table with crisp alignment and no noise."
+      >
+        <div className="overflow-hidden rounded-lg border border-border shadow-[var(--shadow-raised)]">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] border-separate border-spacing-0">
+              <thead>
+                <tr className="bg-surface-secondary/60 text-left text-sm font-medium text-muted-foreground">
+                  {tableColumns.map((column) => (
+                    <th key={column} className="border-b border-border px-6 py-4">
+                      {column}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {tableRows.map((item) => (
+                  <tr key={item.id} className="border-b border-border/70 text-sm last:border-b-0">
+                    <td className="px-6 py-4">{item.name}</td>
+                    <td className="px-6 py-4">{item.role}</td>
+                    <td className="px-6 py-4">{item.status}</td>
+                    <td className="px-6 py-4">{item.email}</td>
+                  </tr>
                 ))}
-              </Table.Header>
-              <Table.Body items={tableRows}>
-                {(item) => (
-                  <Table.Row id={item.id}>
-                    <Table.Cell>{item.name}</Table.Cell>
-                    <Table.Cell>{item.role}</Table.Cell>
-                    <Table.Cell>{item.status}</Table.Cell>
-                    <Table.Cell>{item.email}</Table.Cell>
-                  </Table.Row>
-                )}
-              </Table.Body>
-            </Table.Content>
-          </Table.ScrollContainer>
-        </Table>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </SectionCard>
 
       <div className="grid gap-6 xl:grid-cols-2">
@@ -147,7 +175,9 @@ export function UiPreviewPage(): ReactElement {
           <Card className="border-border-subtle bg-surface-secondary/60">
             <CardHeader>
               <CardTitle>Inventory</CardTitle>
-              <CardDescription>Page headers keep title, description, and actions aligned.</CardDescription>
+              <CardDescription>
+                Page headers keep title, description, and actions aligned.
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-wrap items-center gap-3">
               <Button variant="outline">Export</Button>
@@ -156,29 +186,35 @@ export function UiPreviewPage(): ReactElement {
           </Card>
         </SectionCard>
 
-        <SectionCard title="Loading skeletons" description="Subtle placeholders that preserve rhythm.">
+        <SectionCard
+          title="Loading skeletons"
+          description="Subtle placeholders that preserve rhythm."
+        >
           <div className="space-y-4">
             <div className="space-y-2">
-              <Skeleton className="h-4 w-28 rounded-full" />
-              <Skeleton className="h-8 w-3/4 rounded-full" />
-              <Skeleton className="h-4 w-2/3 rounded-full" />
+              <SkeletonBar className="h-4 w-28" />
+              <SkeletonBar className="h-8 w-3/4" />
+              <SkeletonBar className="h-4 w-2/3" />
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              <Skeleton className="h-28 rounded-[16px]" />
-              <Skeleton className="h-28 rounded-[16px]" />
+              <SkeletonBar className="h-28 rounded-lg" />
+              <SkeletonBar className="h-28 rounded-lg" />
             </div>
           </div>
         </SectionCard>
       </div>
 
-      <SectionCard title="Typography" description="Type scale, hierarchy, and comfortable reading rhythm.">
+      <SectionCard
+        title="Typography"
+        description="Type scale, hierarchy, and comfortable reading rhythm."
+      >
         <div className="space-y-5">
           {typographySamples.map((item) => {
             const Icon = item.icon;
 
             return (
               <div key={item.label} className="flex items-start gap-4">
-                <div className="flex size-10 items-center justify-center rounded-[14px] bg-surface-secondary text-muted-foreground">
+                <div className="flex size-10 items-center justify-center rounded-md bg-surface-secondary text-muted-foreground">
                   <Icon className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <div className="space-y-1">

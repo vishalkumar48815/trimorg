@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Patch, Post, Put, UnauthorizedException, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+  Put,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { CurrentUser } from '../common/current-user.decorator';
 import { createSuccessResponse } from '../common/api-response';
 import type { RequestUser } from '../common/request-user.type';
@@ -38,7 +47,10 @@ export class OnboardingController {
     @CurrentUser() user: RequestUser | null,
     @Body() body: OrganizationStepDto,
   ): Promise<ApiSuccess<OnboardingStatus>> {
-    const status = await this.onboardingService.saveOrganizationStep(this.requireUser(user).id, body);
+    const status = await this.onboardingService.saveOrganizationStep(
+      this.requireUser(user).id,
+      body,
+    );
     return createSuccessResponse(status);
   }
 
@@ -56,7 +68,10 @@ export class OnboardingController {
     @CurrentUser() user: RequestUser | null,
     @Body() body: PreferencesStepDto,
   ): Promise<ApiSuccess<OnboardingStatus>> {
-    const status = await this.onboardingService.savePreferencesStep(this.requireUser(user).id, body);
+    const status = await this.onboardingService.savePreferencesStep(
+      this.requireUser(user).id,
+      body,
+    );
     return createSuccessResponse(status);
   }
 

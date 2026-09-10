@@ -92,11 +92,15 @@ export function SignupPage(): ReactElement {
             });
 
             if (result.requiresVerification) {
-              navigate(`/verify-email?email=${encodeURIComponent(values.email)}`, { replace: true });
+              navigate(`/verify-email?email=${encodeURIComponent(values.email)}`, {
+                replace: true,
+              });
               return;
             }
 
-            setFormMessage(result.message ?? 'Account created. Check your email to verify your account.');
+            setFormMessage(
+              result.message ?? 'Account created. Check your email to verify your account.',
+            );
           } catch (error) {
             setFormMessage(getErrorMessage(error));
           }
@@ -113,7 +117,12 @@ export function SignupPage(): ReactElement {
             <label className="text-sm font-medium text-foreground" htmlFor="signup-full-name">
               Full Name
             </label>
-            <Input id="signup-full-name" type="text" placeholder="John Smith" {...form.register('fullName')} />
+            <Input
+              id="signup-full-name"
+              type="text"
+              placeholder="John Smith"
+              {...form.register('fullName')}
+            />
             {form.formState.errors.fullName ? (
               <p className="text-sm text-danger">{form.formState.errors.fullName.message}</p>
             ) : null}
@@ -123,7 +132,12 @@ export function SignupPage(): ReactElement {
             <label className="text-sm font-medium text-foreground" htmlFor="signup-business-name">
               Business Name
             </label>
-            <Input id="signup-business-name" type="text" placeholder="Trimorg Traders" {...form.register('businessName')} />
+            <Input
+              id="signup-business-name"
+              type="text"
+              placeholder="Trimorg Traders"
+              {...form.register('businessName')}
+            />
             {form.formState.errors.businessName ? (
               <p className="text-sm text-danger">{form.formState.errors.businessName.message}</p>
             ) : null}
@@ -139,7 +153,13 @@ export function SignupPage(): ReactElement {
               className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
               aria-hidden="true"
             />
-            <Input id="signup-email" type="email" placeholder="name@company.com" className="pl-9" {...form.register('email')} />
+            <Input
+              id="signup-email"
+              type="email"
+              placeholder="name@company.com"
+              className="pl-9"
+              {...form.register('email')}
+            />
           </div>
           {form.formState.errors.email ? (
             <p className="text-sm text-danger">{form.formState.errors.email.message}</p>
@@ -155,7 +175,13 @@ export function SignupPage(): ReactElement {
               className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
               aria-hidden="true"
             />
-            <Input id="signup-mobile-number" type="tel" placeholder="+91 98765 43210" className="pl-9" {...form.register('mobile')} />
+            <Input
+              id="signup-mobile-number"
+              type="tel"
+              placeholder="+91 98765 43210"
+              className="pl-9"
+              {...form.register('mobile')}
+            />
           </div>
           {form.formState.errors.mobile ? (
             <p className="text-sm text-danger">{form.formState.errors.mobile.message}</p>
@@ -167,14 +193,22 @@ export function SignupPage(): ReactElement {
             <label className="text-sm font-medium text-foreground" htmlFor="signup-password">
               Password
             </label>
-            <Input id="signup-password" type="password" placeholder="Create a password" {...form.register('password')} />
+            <Input
+              id="signup-password"
+              type="password"
+              placeholder="Create a password"
+              {...form.register('password')}
+            />
             {form.formState.errors.password ? (
               <p className="text-sm text-danger">{form.formState.errors.password.message}</p>
             ) : null}
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground" htmlFor="signup-confirm-password">
+            <label
+              className="text-sm font-medium text-foreground"
+              htmlFor="signup-confirm-password"
+            >
               Confirm Password
             </label>
             <Input

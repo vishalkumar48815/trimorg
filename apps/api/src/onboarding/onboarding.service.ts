@@ -82,7 +82,9 @@ export class OnboardingService {
     }
 
     const organization = user.organization;
-    const isComplete = Boolean(user.onboardingCompletedAt && organization?.status === OrganizationStatus.ACTIVE);
+    const isComplete = Boolean(
+      user.onboardingCompletedAt && organization?.status === OrganizationStatus.ACTIVE,
+    );
 
     return {
       hasOrganization: Boolean(organization),
@@ -116,7 +118,10 @@ export class OnboardingService {
     return this.buildStatus(userId);
   }
 
-  async saveOrganizationStep(userId: string, input: OrganizationStepInput): Promise<OnboardingStatus> {
+  async saveOrganizationStep(
+    userId: string,
+    input: OrganizationStepInput,
+  ): Promise<OnboardingStatus> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: { organization: true },
@@ -169,7 +174,8 @@ export class OnboardingService {
       where: { id: organization.id },
       data: {
         addressLine1: input.addressLine1,
-        addressLine2: input.addressLine2 && input.addressLine2.length > 0 ? input.addressLine2 : null,
+        addressLine2:
+          input.addressLine2 && input.addressLine2.length > 0 ? input.addressLine2 : null,
         city: input.city,
         state: input.state,
         postalCode: input.postalCode,
@@ -180,7 +186,10 @@ export class OnboardingService {
     return this.buildStatus(userId);
   }
 
-  async savePreferencesStep(userId: string, input: PreferencesStepInput): Promise<OnboardingStatus> {
+  async savePreferencesStep(
+    userId: string,
+    input: PreferencesStepInput,
+  ): Promise<OnboardingStatus> {
     const organization = await this.requireOrganization(userId);
 
     await this.prisma.$transaction([
@@ -212,8 +221,10 @@ export class OnboardingService {
       where: { id: organization.id },
       data: {
         logoUrl: input.logoDataUrl && input.logoDataUrl.length > 0 ? input.logoDataUrl : null,
-        logoFileName: input.logoFileName && input.logoFileName.length > 0 ? input.logoFileName : null,
-        logoMimeType: input.logoMimeType && input.logoMimeType.length > 0 ? input.logoMimeType : null,
+        logoFileName:
+          input.logoFileName && input.logoFileName.length > 0 ? input.logoFileName : null,
+        logoMimeType:
+          input.logoMimeType && input.logoMimeType.length > 0 ? input.logoMimeType : null,
       },
     });
 
@@ -306,8 +317,13 @@ export class OnboardingService {
 
     return {
       hasOrganization: Boolean(user.organization),
-      isComplete: Boolean(user.onboardingCompletedAt && user.organization?.status === OrganizationStatus.ACTIVE),
-      currentStep: this.resolveCurrentStep(user.organization ?? null, Boolean(user.onboardingCompletedAt)),
+      isComplete: Boolean(
+        user.onboardingCompletedAt && user.organization?.status === OrganizationStatus.ACTIVE,
+      ),
+      currentStep: this.resolveCurrentStep(
+        user.organization ?? null,
+        Boolean(user.onboardingCompletedAt),
+      ),
       organization: user.organization ? serializeOrganization(user.organization) : null,
     };
   }
@@ -338,7 +354,11 @@ export class OnboardingService {
       return 2;
     }
 
-    if (!organization.currencyCode || !organization.timezone || !organization.financialYearStartMonth) {
+    if (
+      !organization.currencyCode ||
+      !organization.timezone ||
+      !organization.financialYearStartMonth
+    ) {
       return 3;
     }
 

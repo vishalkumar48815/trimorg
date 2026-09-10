@@ -10,7 +10,11 @@ import { PreferencesStepSection } from '@/features/onboarding/preferences-step-s
 type OnboardingStep = 1 | 2 | 3;
 
 function resolveOnboardingStep(status: OnboardingStatus | undefined): OnboardingStep {
-  if (!status?.organization || status.organization.businessType === 'Pending' || status.currentStep <= 1) {
+  if (
+    !status?.organization ||
+    status.organization.businessType === 'Pending' ||
+    status.currentStep <= 1
+  ) {
     return 1;
   }
 
@@ -35,7 +39,9 @@ export function OnboardingPage(): ReactElement {
   }, [statusQuery.data]);
 
   if (activeStep === 1) {
-    return <BusinessStepSection statusQuery={statusQuery} onStepComplete={() => setActiveStep(2)} />;
+    return (
+      <BusinessStepSection statusQuery={statusQuery} onStepComplete={() => setActiveStep(2)} />
+    );
   }
 
   if (activeStep === 2) {

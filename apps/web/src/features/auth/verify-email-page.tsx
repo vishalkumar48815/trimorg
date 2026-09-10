@@ -8,7 +8,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AuthLayout } from '@/features/auth/auth-layout';
-import { resendOtp as resendOtpRequest, verifyEmail as verifyEmailRequest } from '@/features/auth/auth.api';
+import {
+  resendOtp as resendOtpRequest,
+  verifyEmail as verifyEmailRequest,
+} from '@/features/auth/auth.api';
 import { verifyEmailSchema, type VerifyEmailValues } from '@/features/auth/auth.schemas';
 import { ApiRequestError } from '@/lib/api';
 

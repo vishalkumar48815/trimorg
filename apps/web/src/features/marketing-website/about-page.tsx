@@ -70,14 +70,16 @@ export function AboutPage(): ReactElement {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {['Premium, not flashy', 'Reusable, not one-off', 'Calm, not crowded'].map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-[16px] border border-border bg-background px-4 py-3 text-sm font-medium text-foreground shadow-sm"
-                  >
-                    {item}
-                  </div>
-                ))}
+                {['Premium, not flashy', 'Reusable, not one-off', 'Calm, not crowded'].map(
+                  (item) => (
+                    <div
+                      key={item}
+                      className="rounded-[16px] border border-border bg-background px-4 py-3 text-sm font-medium text-foreground shadow-sm"
+                    >
+                      {item}
+                    </div>
+                  ),
+                )}
               </CardContent>
             </Card>
           </PageReveal>
@@ -95,7 +97,9 @@ export function AboutPage(): ReactElement {
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </div>
                     <CardTitle className="text-lg">{item.title}</CardTitle>
-                    <CardDescription className="text-sm leading-6">{item.description}</CardDescription>
+                    <CardDescription className="text-sm leading-6">
+                      {item.description}
+                    </CardDescription>
                   </CardHeader>
                 </Card>
               </PageReveal>

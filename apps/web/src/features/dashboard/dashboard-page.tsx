@@ -28,7 +28,9 @@ export function DashboardPage() {
           {dashboardSections.map((section) => (
             <Card key={section.title} className="min-h-44">
               <CardHeader className="pb-3">
-                <CardTitle className="text-base font-medium text-foreground">{section.title}</CardTitle>
+                <CardTitle className="text-base font-medium text-foreground">
+                  {section.title}
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-1 items-center">
                 <p className="text-sm font-medium text-muted-foreground">Coming Soon</p>

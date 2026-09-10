@@ -17,9 +17,7 @@ export function TermsConditionsPage(): ReactElement {
                   Trimorg is a business operating system intended to support wholesale and
                   distribution workflows.
                 </p>
-                <p>
-                  Final access rules and account obligations will be defined before launch.
-                </p>
+                <p>Final access rules and account obligations will be defined before launch.</p>
               </>
             ),
           },
@@ -41,12 +39,8 @@ export function TermsConditionsPage(): ReactElement {
             title: 'Service changes',
             body: (
               <>
-                <p>
-                  Trimorg may change features and product structure as the platform evolves.
-                </p>
-                <p>
-                  The final terms will define how those changes are handled for customers.
-                </p>
+                <p>Trimorg may change features and product structure as the platform evolves.</p>
+                <p>The final terms will define how those changes are handled for customers.</p>
               </>
             ),
           },

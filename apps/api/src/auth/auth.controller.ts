@@ -1,9 +1,22 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 import { createSuccessResponse } from '../common/api-response';
+import { AuthGuard } from './auth.guard';
+import { CurrentUser } from '../common/current-user.decorator';
+import type { RequestUser } from '../common/request-user.type';
 import { AuthService } from './auth.service';
 import {
+  ChangePasswordDto,
   ForgotPasswordDto,
   LoginDto,
   RegisterDto,
@@ -74,6 +87,23 @@ export class AuthController {
   @Get('me')
   async me(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
     const result = await this.authService.getSession(request, response);
+    return createSuccessResponse(result);
+  }
+
+  @Post('change-password')
+  @UseGuards(AuthGuard)
+  async changePassword(
+    @CurrentUser() user: RequestUser | null,
+    @Body() body: ChangePasswordDto,
+  ) {
+    if (!user) {
+      throw new UnauthorizedException({
+        code: 'Unauthorized',
+        message: 'Authentication is required.',
+      });
+    }
+
+    const result = await this.authService.changePassword(user.id, body);
     return createSuccessResponse(result);
   }
 }

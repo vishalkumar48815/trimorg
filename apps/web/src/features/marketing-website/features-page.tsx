@@ -1,5 +1,5 @@
 import { useMemo, type ReactElement } from 'react';
-import { BarChart3, Boxes, ShieldCheck, Workflow, HelpCircle, ArrowRight } from 'lucide-react';
+import { BarChart3, Boxes, Receipt, Users, HelpCircle, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,24 +11,24 @@ import { getPageFaqs } from '@/features/marketing-website/public-site.data';
 
 const featureBlocks = [
   {
+    icon: Receipt,
+    title: 'Rapid Counter POS & Invoicing',
+    description: 'Sub-second barcode lookups, split tender payments, 58mm/80mm thermal receipts, and 1-tap WhatsApp invoice delivery.',
+  },
+  {
     icon: Boxes,
-    title: 'Product and inventory control',
-    description: 'Keep your catalog, stock, and selling data organized in one calm workspace with barcode search and multi-warehouse sync.',
+    title: 'Real-Time Inventory & Multi-Branch Sync',
+    description: 'Live SKU counts across stores and godowns, automated low-stock warnings, barcode generator, and inter-branch transfer slips.',
   },
   {
-    icon: Workflow,
-    title: 'Sales operations & POS',
-    description: 'Track orders, split tenders, invoices, and customer dues without jumping between disconnected tools.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'EV & Workshop Job Cards',
-    description: 'Specialized vehicle intake, technician assignment, EV battery health telemetry, and service histories.',
+    icon: Users,
+    title: 'Customer Khata & Supplier Ledgers',
+    description: 'Track customer credit (Udhaar), aging overdue balances, supplier purchase bills, and automated collection reminders.',
   },
   {
     icon: BarChart3,
-    title: 'GST & Financial Reporting',
-    description: 'Automated tax calculations (CGST, SGST, IGST), profit margins, and single-click GSTR export reports.',
+    title: 'GST, VAT & Profit Margin Analytics',
+    description: 'Automated tax calculations (CGST, SGST, IGST, VAT), gross margin tracking, and 1-click spreadsheet tax exports.',
   },
 ];
 
@@ -41,7 +41,7 @@ export function FeaturesPage(): ReactElement {
         <PageHeader
           eyebrow="Features"
           title="Engineered for operational mastery"
-          description="A comprehensive overview of the core capabilities powering modern retail shops, distributors, and automotive workshops."
+          description="A comprehensive overview of the core capabilities powering wholesalers, retail shop owners, grocery stores, and trade businesses."
         />
 
         <div className="grid gap-6 md:grid-cols-2">

@@ -7,43 +7,77 @@ export function PrivacyPolicyPage(): ReactElement {
     <PublicSiteLayout>
       <PublicDocumentPage
         title="Privacy Policy"
-        description="A clear, layout-only privacy policy page for Trimorg."
+        description="Comprehensive data protection, encryption architecture, and privacy governance for TrimOrg users globally."
         sections={[
           {
-            title: 'Information we collect',
+            title: '1. Information We Collect & Scope',
             body: (
               <>
                 <p>
-                  Trimorg would collect the information needed to create and support a business
-                  workspace, such as account details, business profile data, and usage information.
+                  To deliver our multi-tenant Business Operating System (BOS), TrimOrg processes: (a) Account identity records (name, business email, mobile phone, store details); (b) Billing metadata (selected tier, transaction receipts); (c) Customer operations records (product inventory, pricing catalogs, customer contact records, and sales invoices).
                 </p>
                 <p>
-                  This page is a structure placeholder and does not include legal commitments yet.
+                  Payment Card Security: We do not process or store raw credit/debit card numbers on our infrastructure. All payment processing is delegated to PCI-DSS Level 1 certified gateways (Razorpay in India, Stripe internationally).
                 </p>
               </>
             ),
           },
           {
-            title: 'How we use information',
+            title: '2. Zero-Monetization & Strict Data Isolation Guarantee',
             body: (
               <>
-                <p>
-                  Any future implementation would use information to operate the product, provide
-                  support, and improve the user experience.
+                <p className="font-semibold text-foreground">
+                  Zero Monetization Policy: TrimOrg will never sell, rent, license, or monetize your customer databases, inventory quantities, purchase orders, or sales transactions to any third party, aggregator, or advertiser under any circumstances.
                 </p>
-                <p>The final policy text will be reviewed before launch.</p>
+                <p>
+                  Multi-Tenant Isolation: Every organization workspace operates in strict tenant-isolated logical boundaries backed by foreign-key enforcement and authorization guards at the API and database levels.
+                </p>
               </>
             ),
           },
           {
-            title: 'Your controls',
+            title: '3. Technical Security & Encryption Standards',
             body: (
               <>
                 <p>
-                  The privacy page is laid out to support eventual settings around access, export,
-                  and account management.
+                  Data in Transit: All incoming and outgoing data transmissions are encrypted using Transport Layer Security (TLS 1.3) with HSTS enforcement.
                 </p>
-                <p>Specific controls will be added when the product and legal review are ready.</p>
+                <p>
+                  Data at Rest: All core database volumes, audit logs, and backups are encrypted using military-grade 256-bit Advanced Encryption Standard (AES-256). Password credentials are hashed using salted cryptographic algorithms (bcrypt / Argon2).
+                </p>
+              </>
+            ),
+          },
+          {
+            title: '4. International Data Privacy (GDPR, India DPDP & CCPA Alignment)',
+            body: (
+              <>
+                <p>
+                  We comply with applicable global privacy frameworks including India&apos;s Digital Personal Data Protection Act (DPDP), the European Union General Data Protection Regulation (GDPR), and the California Consumer Privacy Act (CCPA).
+                </p>
+                <p>
+                  Subscribers retain the Right of Access, Right to Rectification, Right to Data Portability, and the Right to Erasure for any customer contact information stored within their tenant workspace.
+                </p>
+              </>
+            ),
+          },
+          {
+            title: '5. Unconditional Data Portability & Export Rights',
+            body: (
+              <>
+                <p>
+                  You own 100% of your business data. TrimOrg provides unrestricted, automated export utilities allowing you to download your full product catalogs, customer transaction ledgers, inventory movements, and GST/VAT sales tax records in CSV, Excel, or PDF format at any time.
+                </p>
+              </>
+            ),
+          },
+          {
+            title: '6. Retention & Permanent Account Erasure',
+            body: (
+              <>
+                <p>
+                  Your business records remain safely stored for the duration of your active subscription. Upon explicit account termination or formal erasure request, your proprietary database records are purged in accordance with standard automated backup rotation lifecycles.
+                </p>
               </>
             ),
           },

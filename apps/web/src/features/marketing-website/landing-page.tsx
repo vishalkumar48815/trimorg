@@ -1,5 +1,20 @@
 import { useState, useMemo, type ReactElement } from 'react';
-import { ArrowRight, Check, CheckCircle2, ChevronRight, Zap, Users, Building2 } from 'lucide-react';
+import {
+  ArrowRight,
+  Check,
+  CheckCircle2,
+  ChevronRight,
+  Zap,
+  Users,
+  Building2,
+  Store,
+  ShoppingCart,
+  Truck,
+  Boxes,
+  Receipt,
+  PackageCheck,
+  Globe,
+} from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,6 +36,72 @@ import {
   type BillingInterval,
 } from '@/features/marketing-website/public-site.data';
 
+const whoWeHelpList = [
+  {
+    title: 'Wholesale Stocks & Bulk Trade',
+    description: 'Multi-warehouse stock counts, bulk carton conversions, supplier ledgers, and B2B pricing tiers.',
+    to: '/solutions/wholesale-stocks',
+    icon: Truck,
+    badge: 'High Volume',
+  },
+  {
+    title: 'Retail Shop Owners',
+    description: 'Fast barcode counter billing, digital Udhaar/Khata, thermal receipts, and daily sales closing.',
+    to: '/solutions/shop-owners',
+    icon: Store,
+    badge: '< 2s Checkout',
+  },
+  {
+    title: 'Grocery Stores & Supermarts',
+    description: '50,000+ SKU lookup, weight & loose item billing, expiry tracking, and distributor replenishment.',
+    to: '/solutions/grocery-shops',
+    icon: ShoppingCart,
+    badge: 'Fast Scan',
+  },
+  {
+    title: 'Electricians & Trade Pros',
+    description: 'On-site job estimates, electrical parts inventory, labor invoicing, and instant payment links.',
+    to: '/solutions/electricians-contractors',
+    icon: Zap,
+    badge: 'Mobile Ready',
+  },
+  {
+    title: 'Enterprise Multi-Branch Chains',
+    description: 'Centralized master catalog, inter-branch stock balancing, custom roles, and API integrations.',
+    to: '/solutions/enterprise',
+    icon: Building2,
+    badge: 'Central Sync',
+  },
+];
+
+const softwareSolutions = [
+  {
+    title: 'Inventory Management',
+    description: 'Track stock in real time, automate reorder alerts, manage batches, and eliminate stockouts.',
+    to: '/solutions/inventory-management',
+    icon: Boxes,
+  },
+  {
+    title: 'Bill Generation Software',
+    description: 'Create GST/tax compliant invoices, print thermal receipts, and deliver instant WhatsApp bills.',
+    to: '/solutions/bill-generation-software',
+    icon: Receipt,
+  },
+  {
+    title: 'Stock Management & Procurement',
+    description: 'Streamline purchase orders, supplier ledgers, restock thresholds, and profit margin analysis.',
+    to: '/solutions/stock-management',
+    icon: PackageCheck,
+  },
+];
+
+const countryList = [
+  { name: 'India', flag: '🇮🇳', code: 'INR · GST & UPI Ready', to: '/country/india' },
+  { name: 'United Kingdom', flag: '🇬🇧', code: 'GBP · HMRC VAT & MTD Ready', to: '/country/united-kingdom' },
+  { name: 'Australia', flag: '🇦🇺', code: 'AUD · ATO GST Compliant', to: '/country/australia' },
+  { name: 'United States', flag: '🇺🇸', code: 'USD · Multi-State Sales Tax', to: '/country/united-states' },
+];
+
 export function LandingPage(): ReactElement {
   const [currency] = useState<Currency>(() => detectUserCurrency());
   const [interval, setInterval] = useState<BillingInterval>('yearly');
@@ -28,32 +109,33 @@ export function LandingPage(): ReactElement {
 
   return (
     <PublicSiteLayout>
+      {/* Hero Section */}
       <PageReveal>
         <section className="grid items-center gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 pt-2 sm:pt-4">
           <div className="space-y-6 sm:space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/90 px-3.5 py-1.5 text-[11px] sm:text-xs font-semibold text-muted-foreground shadow-xs">
               <span className="size-2 rounded-full bg-primary animate-pulse" aria-hidden="true" />
-              SME & Workshop Operating System (BOS)
+              Wholesale & Retail Business Operating System (BOS)
             </div>
 
             <div className="space-y-3 sm:space-y-5">
               <h1 className="max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-[1.18] sm:leading-[1.12]">
-                One calm workspace for your business operations.
+                One calm workspace for billing, inventory, and stock control.
               </h1>
               <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-lg">
-                Trimorg unifies POS billing, customer CRM, real-time inventory, procurement, and tax reporting in a high-clarity workspace.
+                Trimorg unifies rapid POS billing, real-time multi-branch stock tracking, supplier purchase orders, and customer credit ledgers in one fast, reliable platform.
               </p>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Button asChild size="default" className="w-full sm:w-auto rounded-xl shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-lg sm:h-12 sm:px-6">
                 <Link to="/signup">
-                  Get Started Free
+                  Start 14-Day Free Trial
                   <ArrowRight className="h-4 w-4 ml-1.5" aria-hidden="true" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="default" className="w-full sm:w-auto rounded-xl transition-all duration-300 hover:scale-[1.02] sm:h-12 sm:px-6">
-                <a href="#features">Explore Features</a>
+                <a href="#who-we-help">Explore Solutions</a>
               </Button>
             </div>
           </div>
@@ -61,16 +143,21 @@ export function LandingPage(): ReactElement {
           <div id="demo">
             <Card className="overflow-hidden border-border/80 bg-card shadow-xl rounded-2xl sm:rounded-3xl transition-all duration-300 hover:shadow-2xl">
               <CardHeader className="border-b border-border/70 p-5 sm:p-7">
-                <CardTitle className="text-sm sm:text-base font-bold text-foreground">Workspace Overview</CardTitle>
+                <CardTitle className="text-sm sm:text-base font-bold text-foreground">Operational Overview</CardTitle>
                 <CardDescription className="text-xs text-muted-foreground mt-0.5">
-                  POS Cashier · Real-Time Stock · Customer Dues · GST Tax Reports
+                  Counter POS · Live Stock · Supplier POs · GST Tax Reports
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 p-5 sm:p-7">
                 <div className="grid gap-3 sm:grid-cols-2">
-                  {['Point of Sale', 'Stock Inventory', 'Invoices & Dues', 'GST Reports'].map((item) => (
+                  {[
+                    { label: 'Counter POS Billing', desc: '< 2s Checkout' },
+                    { label: 'Real-Time Inventory', desc: 'Live Multi-Branch' },
+                    { label: 'Customer Udhaar / CRM', desc: 'Auto Reminders' },
+                    { label: 'Tax & GST Reports', desc: '1-Click Export' },
+                  ].map((item) => (
                     <div
-                      key={item}
+                      key={item.label}
                       className="rounded-xl sm:rounded-2xl border border-border bg-background/80 p-3.5 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-sm"
                     >
                       <div className="flex items-center gap-3">
@@ -78,8 +165,8 @@ export function LandingPage(): ReactElement {
                           <CheckCircle2 className="size-4 sm:size-5" aria-hidden="true" />
                         </div>
                         <div>
-                          <p className="text-xs sm:text-sm font-semibold text-foreground">{item}</p>
-                          <p className="text-[11px] text-emerald-600 font-medium dark:text-emerald-400">Live Ready</p>
+                          <p className="text-xs sm:text-sm font-semibold text-foreground">{item.label}</p>
+                          <p className="text-[11px] text-emerald-600 font-medium dark:text-emerald-400">{item.desc}</p>
                         </div>
                       </div>
                     </div>
@@ -98,12 +185,13 @@ export function LandingPage(): ReactElement {
         </section>
       </PageReveal>
 
+      {/* Trusted By / Category Badges */}
       <PageReveal>
         <section className="space-y-6 sm:space-y-10">
           <SectionHeading
-            eyebrow="Trusted by"
-            title="Built for modern retail & repair businesses."
-            description="Designed for high-reliability countertop billing, workshop job tracking, and SME supply chains."
+            eyebrow="Trusted by modern businesses"
+            title="Engineered for high-volume counters, warehouses, and trade shops."
+            description="Designed for high-reliability daily billing, stock management, and multi-branch distribution."
           />
           <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {trustedByLogos.map((label, index) => (
@@ -118,12 +206,136 @@ export function LandingPage(): ReactElement {
         </section>
       </PageReveal>
 
+      {/* WHO WE HELP SECTION */}
+      <PageReveal>
+        <section id="who-we-help" className="space-y-6 sm:space-y-10">
+          <SectionHeading
+            eyebrow="Who We Help"
+            title="Tailored solutions for your specific business model."
+            description="Whether you run a high-volume wholesale warehouse, a busy retail counter, or trade services, Trimorg adapts to your workflow."
+          />
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {whoWeHelpList.map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <PageReveal key={item.title} delay={index * 0.05}>
+                  <Link to={item.to} className="group block h-full">
+                    <Card className="h-full rounded-2xl sm:rounded-3xl border-border/80 bg-card shadow-sm transition-all duration-300 hover:border-primary/40 hover:shadow-xl hover:scale-[1.02] flex flex-col justify-between">
+                      <CardHeader className="space-y-3 p-6 sm:p-7">
+                        <div className="flex items-center justify-between">
+                          <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20 shadow-inner">
+                            <Icon className="size-5" />
+                          </div>
+                          <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                            {item.badge}
+                          </span>
+                        </div>
+                        <CardTitle className="text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                          {item.title}
+                        </CardTitle>
+                        <CardDescription className="text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                          {item.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardFooter className="p-6 pt-0 border-t border-border/40 mt-auto flex items-center justify-between text-xs font-semibold text-primary">
+                        <span>Learn how we help</span>
+                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                      </CardFooter>
+                    </Card>
+                  </Link>
+                </PageReveal>
+              );
+            })}
+          </div>
+        </section>
+      </PageReveal>
+
+      {/* WHAT WE PROVIDE / SOLUTIONS SECTION */}
+      <PageReveal>
+        <section className="space-y-6 sm:space-y-10">
+          <SectionHeading
+            eyebrow="What We Provide"
+            title="Specialized software capabilities that drive growth."
+            description="Explore our dedicated software systems for inventory control, rapid POS invoicing, and smart stock replenishment."
+          />
+          <div className="grid gap-6 md:grid-cols-3">
+            {softwareSolutions.map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <PageReveal key={item.title} delay={index * 0.05}>
+                  <Link to={item.to} className="group block h-full">
+                    <Card className="h-full rounded-2xl sm:rounded-3xl border-border/80 bg-card shadow-sm transition-all duration-300 hover:border-primary/40 hover:shadow-xl hover:scale-[1.02] flex flex-col justify-between">
+                      <CardHeader className="space-y-3 p-6 sm:p-7">
+                        <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20 shadow-inner">
+                          <Icon className="size-5" />
+                        </div>
+                        <CardTitle className="text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                          {item.title}
+                        </CardTitle>
+                        <CardDescription className="text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                          {item.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardFooter className="p-6 pt-0 border-t border-border/40 mt-auto flex items-center justify-between text-xs font-semibold text-primary">
+                        <span>Explore system</span>
+                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                      </CardFooter>
+                    </Card>
+                  </Link>
+                </PageReveal>
+              );
+            })}
+          </div>
+        </section>
+      </PageReveal>
+
+      {/* COUNTRY PORTALS SECTION */}
+      <PageReveal>
+        <section className="rounded-3xl border border-border/80 bg-surface-secondary/40 p-6 sm:p-10 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+                <Globe className="size-4" />
+                Global & Regional Localization
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                Localized for your country and tax authority
+              </h2>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {countryList.map((c) => (
+              <Link
+                key={c.name}
+                to={c.to}
+                className="group rounded-2xl border border-border/70 bg-card p-4 sm:p-5 transition-all hover:border-primary/40 hover:shadow-md hover:scale-[1.02] flex items-center justify-between"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{c.flag}</span>
+                    <span className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                      {c.name}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">{c.code}</p>
+                </div>
+                <ChevronRight className="size-4 text-muted-foreground group-hover:text-primary transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            ))}
+          </div>
+        </section>
+      </PageReveal>
+
+      {/* CORE FEATURES SECTION */}
       <PageReveal>
         <section id="features" className="space-y-6 sm:space-y-10">
           <SectionHeading
-            eyebrow="Features"
-            title="Core capabilities for daily operating rhythm."
-            description="Trimorg keeps the surface focused on the work business owners and staff actually do every day."
+            eyebrow="Core Features"
+            title="Everything required for daily operating rhythm."
+            description="Trimorg keeps the surface clean and focused on what business owners and counter staff do every day."
           />
           <div className="grid gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-4">
             {featureItems.map((item, index) => {
@@ -133,8 +345,15 @@ export function LandingPage(): ReactElement {
                 <PageReveal key={item.title} delay={index * 0.05}>
                   <Card className="h-full rounded-2xl sm:rounded-3xl border-border/80 bg-card shadow-sm transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-xl dark:hover:shadow-primary/10 hover:border-primary/40">
                     <CardHeader className="space-y-3 sm:space-y-4 p-5 sm:p-7">
-                      <div className="flex size-10 sm:size-12 items-center justify-center rounded-xl sm:rounded-2xl bg-primary/10 text-primary border border-primary/20 shadow-inner">
-                        <Icon className="size-4 sm:size-5" aria-hidden="true" />
+                      <div className="flex items-center justify-between">
+                        <div className="flex size-10 sm:size-12 items-center justify-center rounded-xl sm:rounded-2xl bg-primary/10 text-primary border border-primary/20 shadow-inner">
+                          <Icon className="size-4 sm:size-5" aria-hidden="true" />
+                        </div>
+                        {item.badge && (
+                          <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                            {item.badge}
+                          </span>
+                        )}
                       </div>
                       <CardTitle className="text-base sm:text-lg font-bold text-foreground">{item.title}</CardTitle>
                       <CardDescription className="text-xs sm:text-sm leading-relaxed text-muted-foreground">
@@ -149,12 +368,13 @@ export function LandingPage(): ReactElement {
         </section>
       </PageReveal>
 
+      {/* HOW IT WORKS */}
       <PageReveal>
         <section id="how-it-works" className="space-y-6 sm:space-y-10">
           <SectionHeading
             eyebrow="How it works"
-            title="A simple flow for a complex business."
-            description="The product feels obvious to use while providing operational depth across every department."
+            title="Simple setup, powerful execution."
+            description="Get your complete store catalog, inventory, and billing running in under two minutes."
           />
           <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
             {workItems.map((item, index) => (
@@ -176,12 +396,13 @@ export function LandingPage(): ReactElement {
         </section>
       </PageReveal>
 
+      {/* BENEFITS */}
       <PageReveal>
         <section className="space-y-6 sm:space-y-10">
           <SectionHeading
             eyebrow="Benefits"
-            title="Premium structure that stays calm as you grow."
-            description="The interface prioritizes clarity, efficiency, and stable visual rhythm over clutter."
+            title="Clear visibility that stays calm as you grow."
+            description="The interface prioritizes speed, clarity, and stable operational rhythm over clutter."
           />
           <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
             {benefitItems.map((item, index) => {
@@ -207,16 +428,17 @@ export function LandingPage(): ReactElement {
         </section>
       </PageReveal>
 
+      {/* PRICING SECTION */}
       <PageReveal>
         <section id="pricing" className="space-y-8 sm:space-y-10">
           <div className="flex flex-col items-center text-center space-y-3">
             <SectionHeading
               eyebrow="Pricing"
-              title="Straightforward pricing for every business size."
-              description="Transparent tiers tailored for single stores, growing multi-staff workshops, and distributors."
+              title="Transparent pricing for every business size."
+              description="Simple tiers tailored for single stores, growing wholesalers, and multi-branch chains."
             />
 
-            {/* Controls: Billing Interval Toggle (Monthly / Yearly) */}
+            {/* Interval Toggle */}
             <div className="pt-2 flex items-center justify-center">
               <div className="inline-flex items-center rounded-xl p-1 bg-muted/60 border border-border shadow-inner">
                 <button
@@ -280,7 +502,6 @@ export function LandingPage(): ReactElement {
                         {plan.description}
                       </CardDescription>
 
-                      {/* Price display */}
                       <div className="pt-2">
                         <div className="flex items-baseline gap-1">
                           <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
@@ -309,7 +530,6 @@ export function LandingPage(): ReactElement {
                         ))}
                       </ul>
 
-                      {/* Expansion Add-On Costs (+per user, +per branch) */}
                       <div className="mt-4 pt-3 border-t border-border/50 space-y-1.5 bg-muted/30 -mx-6 px-6 py-3 rounded-b-lg">
                         <div className="flex items-center justify-between text-xs text-muted-foreground">
                           <span className="flex items-center gap-1.5 font-medium">
@@ -353,12 +573,13 @@ export function LandingPage(): ReactElement {
         </section>
       </PageReveal>
 
+      {/* FAQ SECTION */}
       <PageReveal>
         <section id="faq" className="space-y-6 sm:space-y-10">
           <SectionHeading
             eyebrow="FAQ"
             title="Frequently asked questions."
-            description="Clear answers about TrimOrg's capabilities, offline resilience, data ownership, and setup."
+            description="Clear answers about Trimorg's capabilities, offline mode, data export rights, and hardware compatibility."
           />
           <div className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible defaultValue="core-1" className="w-full space-y-3">
@@ -381,25 +602,26 @@ export function LandingPage(): ReactElement {
         </section>
       </PageReveal>
 
+      {/* FINAL CTA BANNER */}
       <PageReveal>
         <section className="space-y-6 sm:space-y-8">
           <Card className="overflow-hidden rounded-2xl sm:rounded-3xl border-border/80 bg-primary text-primary-foreground shadow-xl">
             <CardContent className="flex flex-col gap-6 sm:gap-8 p-6 sm:p-12 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl space-y-2 sm:space-y-3">
                 <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.24em] text-primary-foreground/80">
-                  Get started
+                  Get started in 2 minutes
                 </p>
                 <h2 className="text-2xl sm:text-4xl font-bold tracking-tight">
                   Build a cleaner operating system for your business.
                 </h2>
                 <p className="max-w-xl text-xs sm:text-base leading-relaxed text-primary-foreground/90">
-                  Start your business operating system today with fast POS checkout, customer vehicle tracking, and real-time inventory.
+                  Start your 14-day free trial today. Fast POS checkout, customer ledger tracking, and real-time inventory at your fingertips.
                 </p>
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Button asChild variant="secondary" size="default" className="w-full sm:w-auto rounded-xl shadow-md transition-all duration-300 hover:scale-[1.02] sm:h-12 sm:px-6">
-                  <Link to="/signup">Get Started</Link>
+                  <Link to="/signup">Start Free Trial</Link>
                 </Button>
                 <Button
                   asChild
@@ -407,8 +629,8 @@ export function LandingPage(): ReactElement {
                   size="default"
                   className="w-full sm:w-auto rounded-xl border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 transition-all duration-300 hover:scale-[1.02] sm:h-12 sm:px-6"
                 >
-                  <a href="#features">
-                    Explore features
+                  <a href="#who-we-help">
+                    Explore Solutions
                     <ChevronRight className="h-4 w-4 ml-1" aria-hidden="true" />
                   </a>
                 </Button>

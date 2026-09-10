@@ -10,15 +10,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary text-primary-foreground shadow-[var(--shadow-raised)] hover:-translate-y-0.5 hover:bg-primary-hover hover:shadow-[var(--shadow-overlay)]',
+          'bg-primary text-primary-foreground shadow-[var(--shadow-raised)] hover:scale-[1.015] hover:bg-primary-hover hover:shadow-md',
         destructive:
-          'bg-danger text-danger-foreground shadow-[var(--shadow-raised)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-overlay)]',
+          'bg-danger text-danger-foreground shadow-[var(--shadow-raised)] hover:scale-[1.015] hover:shadow-md',
         outline:
-          'border border-border bg-surface text-surface-foreground shadow-[var(--shadow-raised)] hover:-translate-y-0.5 hover:bg-surface-secondary hover:shadow-[var(--shadow-overlay)]',
+          'border border-border bg-surface text-surface-foreground shadow-[var(--shadow-raised)] hover:scale-[1.015] hover:bg-surface-secondary hover:shadow-md',
         secondary:
-          'bg-surface-secondary text-surface-foreground shadow-[var(--shadow-raised)] hover:-translate-y-0.5 hover:bg-surface-tertiary hover:shadow-[var(--shadow-overlay)]',
+          'bg-surface-secondary text-surface-foreground shadow-[var(--shadow-raised)] hover:scale-[1.015] hover:bg-surface-tertiary hover:shadow-md',
         ghost:
-          'bg-transparent text-foreground hover:-translate-y-0.5 hover:bg-surface-secondary hover:text-foreground',
+          'bg-transparent text-foreground hover:bg-surface-secondary hover:text-foreground',
         link: '!h-auto !px-0 !py-0 text-primary underline-offset-4 hover:underline',
       },
       size: {

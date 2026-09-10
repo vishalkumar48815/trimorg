@@ -24,7 +24,7 @@ export function SalesProductCard({
       onClick={() => onAdd(product)}
       disabled={!canAdd}
       aria-label={`Add ${product.name}`}
-      className="group flex min-h-40 flex-col justify-between rounded-[16px] border border-border bg-surface p-4 text-left shadow-[var(--shadow-raised)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-overlay)] disabled:cursor-not-allowed disabled:opacity-50"
+      className="group flex min-h-40 flex-col justify-between rounded-2xl border border-border bg-card p-4 text-left shadow-xs transition-all duration-300 ease-out hover:scale-[1.02] hover:border-primary/40 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
     >
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-2">

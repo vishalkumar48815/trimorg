@@ -12,6 +12,7 @@ import { InventoryPage } from '@/features/inventory';
 import { ProductsPage } from '@/features/products/products-page';
 import { GoodsReceivedPage, PurchaseOrdersPage } from '@/features/purchases';
 import { InvoicesPage, NewSalePage, OrdersPage, QuotationsPage } from '@/features/sales';
+import { InventoryReportsPage, SalesReportsPage } from '@/features/reports';
 import { SuppliersPage } from '@/features/suppliers';
 
 const DASHBOARD_PATH = '/dashboard';
@@ -26,6 +27,8 @@ const SALES_QUOTATIONS_PATH = '/sales/quotations';
 const SALES_ORDERS_PATH = '/sales/orders';
 const PURCHASES_PO_PATH = '/purchases/purchase-orders';
 const PURCHASES_GRN_PATH = '/purchases/goods-received';
+const REPORTS_SALES_PATH = '/reports/sales';
+const REPORTS_INVENTORY_PATH = '/reports/inventory';
 
 const EXPLICIT_ROUTES = new Set([
   DASHBOARD_PATH,
@@ -40,6 +43,8 @@ const EXPLICIT_ROUTES = new Set([
   SALES_ORDERS_PATH,
   PURCHASES_PO_PATH,
   PURCHASES_GRN_PATH,
+  REPORTS_SALES_PATH,
+  REPORTS_INVENTORY_PATH,
 ]);
 
 // Leaf items with their own real page are excluded from the generic
@@ -64,6 +69,8 @@ export function AppRoutes() {
       <Route path={SALES_ORDERS_PATH} element={<OrdersPage />} />
       <Route path={PURCHASES_PO_PATH} element={<PurchaseOrdersPage />} />
       <Route path={PURCHASES_GRN_PATH} element={<GoodsReceivedPage />} />
+      <Route path={REPORTS_SALES_PATH} element={<SalesReportsPage />} />
+      <Route path={REPORTS_INVENTORY_PATH} element={<InventoryReportsPage />} />
       {/* Account routes are reachable only via the User Menu, not the sidebar */}
       <Route path="/account/profile" element={<ProfilePage />} />
       <Route path="/account/business" element={<BusinessSettingsPage />} />

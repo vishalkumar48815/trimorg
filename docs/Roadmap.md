@@ -110,14 +110,13 @@ _Objective: Manage formal B2B invoices, customer estimates/quotations, and order
 
 _Objective: Provide actionable intelligence and tax compliance exports for business owners._
 
-- **Backend:**
-  - Build `DashboardService` with cached metrics: Today's Revenue, Orders Count, Low-Stock items count, Top Selling Products, Recent Sales.
-  - Build `ReportsService` generating aggregated summaries for date ranges.
-- **Frontend:**
-  - Replace dashboard placeholder cards with live data cards and interactive revenue charts.
-  - Build `/reports/sales` (Revenue by day, month, category, payment method).
-  - Build `/reports/inventory` (Stock valuation, fast/slow moving items).
-  - Export reports to CSV/Excel.
+- [x] **Backend:**
+  - Build `DashboardService` with live metrics: Today's Revenue, Orders Count, Low-Stock items count, Top Selling Products, Recent Sales.
+  - Build `ReportsService` generating aggregated summaries for date ranges and inventory valuation.
+- [x] **Frontend:**
+  - Executive dashboard with live KPI cards, interactive 7-day revenue trend chart, top products, and recent transactions.
+  - Build `/reports/sales` (Revenue by day, month, category, payment method) with 1-click CSV export.
+  - Build `/reports/inventory` (Stock valuation, fast/slow moving items) with 1-click CSV export.
 
 ---
 
@@ -125,9 +124,12 @@ _Objective: Provide actionable intelligence and tax compliance exports for busin
 
 _Objective: Support multi-staff organizations with role-based restrictions and multi-currency/tax customization._
 
-- **Backend:**
-  - Invite staff via email, assign roles (`OWNER`, `ADMIN`, `STAFF`).
-  - Role-based route guards in NestJS.
-- **Frontend:**
-  - Build `/settings/users` and `/settings/roles`.
-  - Build `/settings/company` (GST, invoice prefix, logo upload, thermal printer width preference).
+- [x] **Backend:**
+  - Multi-user team support with roles (`OWNER`, `ADMIN`, `STAFF`).
+  - Team CRUD endpoints (`GET/POST/PATCH/DELETE /users/team`).
+  - Store preferences endpoints (`GET/PATCH /organization/preferences`).
+- [x] **Frontend:**
+  - Build `/settings/users` (Team roster, invite staff member modal, role changer, delete member).
+  - Build `/settings/roles` (Role-based capabilities matrix for Owner, Admin, and Staff).
+  - Build `/settings/company` (Business profile, address, GSTIN, and identity).
+  - Build `/settings/preferences` (Document sequence prefixes `INV-`/`QT-`/`PO-`, thermal printer layout 80mm/58mm/A4, default GST rate, and fiscal calendar).

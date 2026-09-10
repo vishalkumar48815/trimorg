@@ -23,7 +23,7 @@ export function PageHeader({
         className,
       )}
     >
-      <div className="max-w-3xl space-y-2">
+      <div className="space-y-2">
         {eyebrow ? (
           <p className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">
             {eyebrow}

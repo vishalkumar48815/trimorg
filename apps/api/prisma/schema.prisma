@@ -61,10 +61,12 @@ model User {
   refreshTokenHash           String?
   refreshTokenExpiresAt      DateTime?
   onboardingCompletedAt      DateTime?
-  organizationId             String?       @unique
+  organizationId             String?
   organization               Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   createdAt                  DateTime      @default(now())
   updatedAt                  DateTime      @updatedAt
+
+  @@index([organizationId])
 }
 
 model PendingSignup {
@@ -99,9 +101,14 @@ model Organization {
   logoUrl                 String?
   logoMimeType            String?
   logoFileName            String?
+  invoicePrefix           String?            @default("INV-")
+  quotationPrefix         String?            @default("QT-")
+  purchasePrefix          String?            @default("PO-")
+  receiptPaperWidth       String?            @default("80MM")
+  defaultTaxRate          Decimal?           @default(18.0) @db.Decimal(5, 2)
   status                  OrganizationStatus @default(DRAFT)
   onboardingCompletedAt   DateTime?
-  user                    User?
+  users                   User[]
   customers               Customer[]
   categories              Category[]
   products                Product[]
@@ -109,6 +116,7 @@ model Organization {
   suppliers               Supplier[]
   purchases               Purchase[]
   stockMovements          StockMovement[]
+  payments                Payment[]
   createdAt               DateTime           @default(now())
   updatedAt               DateTime           @updatedAt
 }
@@ -161,6 +169,7 @@ model Customer {
   vehicleDetails String?
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   sales          Sale[]
+  payments       Payment[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
@@ -184,6 +193,7 @@ model Sale {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   customer       Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
   items          SaleItem[]
+  payments       Payment[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
@@ -284,6 +294,28 @@ model PurchaseItem {
 
   @@index([purchaseId])
   @@index([productId])
+}
+
+model Payment {
+  id             String       @id @default(cuid())
+  organizationId String
+  saleId         String?
+  customerId     String?
+  paymentNumber  String
+  amount         Decimal      @db.Decimal(12, 2)
+  paymentMethod  String       @default("CASH")
+  transactionRef String?
+  notes          String?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sale           Sale?        @relation(fields: [saleId], references: [id], onDelete: SetNull)
+  customer       Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([organizationId, paymentNumber])
+  @@index([organizationId, createdAt])
+  @@index([saleId])
+  @@index([customerId])
 }
 
 

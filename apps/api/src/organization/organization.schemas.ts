@@ -45,3 +45,26 @@ export class UpdateOrganizationDto {
 }
 
 export type UpdateOrganizationInput = z.infer<typeof updateOrganizationSchema>;
+
+export const updatePreferencesSchema = z.object({
+  invoicePrefix: z.string().trim().min(1).max(10).default('INV-'),
+  quotationPrefix: z.string().trim().min(1).max(10).default('QT-'),
+  purchasePrefix: z.string().trim().min(1).max(10).default('PO-'),
+  receiptPaperWidth: z.enum(['80MM', '58MM', 'A4']).default('80MM'),
+  defaultTaxRate: z.coerce.number().min(0).max(100).default(18),
+  financialYearStartMonth: z.coerce.number().int().min(1).max(12).default(4),
+  currencyCode: z.string().trim().min(3).max(3).default('INR'),
+});
+
+export class UpdatePreferencesDto {
+  static schema = updatePreferencesSchema;
+  invoicePrefix!: string;
+  quotationPrefix!: string;
+  purchasePrefix!: string;
+  receiptPaperWidth!: '80MM' | '58MM' | 'A4';
+  defaultTaxRate!: number;
+  financialYearStartMonth!: number;
+  currencyCode!: string;
+}
+
+export type UpdatePreferencesInput = z.infer<typeof updatePreferencesSchema>;

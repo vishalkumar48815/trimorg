@@ -14,6 +14,7 @@ import { PageContainer } from '@/shell/page-container';
 import { deleteTeamMember, fetchTeamMembers, updateTeamMemberRole } from './settings.api';
 import { AddTeamMemberModal } from './add-team-member-modal';
 import type { TeamMember } from './settings.types';
+import { showConfirm, showToast, showError } from '@/lib/swal';
 
 export function TeamUsersPage() {
   const queryClient = useQueryClient();
@@ -29,6 +30,11 @@ export function TeamUsersPage() {
       updateTeamMemberRole(id, role),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['settings', 'team'] });
+      showToast('Role updated successfully', 'success');
+    },
+    onError: (err: unknown) => {
+      const msg = err instanceof Error ? err.message : 'Failed to update role.';
+      showError('Role Update Failed', msg);
     },
   });
 
@@ -36,6 +42,11 @@ export function TeamUsersPage() {
     mutationFn: (id: string) => deleteTeamMember(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['settings', 'team'] });
+      showToast('Team member removed', 'success');
+    },
+    onError: (err: unknown) => {
+      const msg = err instanceof Error ? err.message : 'Failed to delete member.';
+      showError('Deletion Failed', msg);
     },
   });
 
@@ -44,9 +55,17 @@ export function TeamUsersPage() {
     roleMutation.mutate({ id: member.id, role: newRole });
   };
 
-  const handleDelete = (member: TeamMember) => {
+  const handleDelete = async (member: TeamMember) => {
     if (member.role === 'OWNER') return;
-    if (window.confirm(`Are you sure you want to remove ${member.fullName} from the organization?`)) {
+    const confirmed = await showConfirm({
+      title: 'Remove Team Member?',
+      text: `Are you sure you want to remove ${member.fullName} (${member.email}) from the organization?`,
+      confirmText: 'Yes, Remove Member',
+      cancelText: 'Keep Member',
+      isDangerous: true,
+    });
+
+    if (confirmed) {
       deleteMutation.mutate(member.id);
     }
   };

@@ -27,6 +27,8 @@ async function bootstrap() {
 
   app.enableShutdownHooks();
 
-  await app.listen(Number(process.env.PORT ?? 3001), '127.0.0.1');
+  const port = Number(process.env.PORT ?? 3001);
+  await app.listen(port, '0.0.0.0');
+  console.log(`🚀 TrimOrg API is running on http://127.0.0.1:${port}/api/v1`);
 }
 void bootstrap();

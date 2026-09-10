@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { PageContainer } from '@/shell/page-container';
 import { fetchStorePreferences, updateStorePreferences } from './settings.api';
 import type { StorePreferences } from './settings.types';
+import { showToast, showError } from '@/lib/swal';
 
 export function PreferencesPage() {
   const queryClient = useQueryClient();
@@ -16,8 +17,8 @@ export function PreferencesPage() {
   const [quotationPrefix, setQuotationPrefix] = useState('QT-');
   const [purchasePrefix, setPurchasePrefix] = useState('PO-');
   const [receiptPaperWidth, setReceiptPaperWidth] = useState<'80MM' | '58MM' | 'A4'>('80MM');
-  const [defaultTaxRate, setDefaultTaxRate] = useState(18);
-  const [financialYearStartMonth, setFinancialYearStartMonth] = useState(4);
+  const [defaultTaxRate, setDefaultTaxRate] = useState<number>(18);
+  const [financialYearStartMonth, setFinancialYearStartMonth] = useState<number>(4);
   const [currencyCode, setCurrencyCode] = useState('INR');
 
   const { data: preferences, isLoading } = useQuery({
@@ -42,7 +43,12 @@ export function PreferencesPage() {
     onSuccess: (data: StorePreferences) => {
       queryClient.setQueryData(['settings', 'preferences'], data);
       setSuccessMsg('Store preferences updated successfully.');
+      showToast('Store preferences saved', 'success');
       setTimeout(() => setSuccessMsg(null), 3500);
+    },
+    onError: (err: unknown) => {
+      const msg = err instanceof Error ? err.message : 'Failed to update preferences.';
+      showError('Update Failed', msg);
     },
   });
 
@@ -60,7 +66,7 @@ export function PreferencesPage() {
   };
 
   return (
-    <PageContainer width="constrained">
+    <PageContainer width="full">
       <div className="flex flex-col gap-6 pb-12">
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

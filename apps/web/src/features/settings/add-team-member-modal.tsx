@@ -4,6 +4,7 @@ import { X, UserPlus, Shield, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { createTeamMember } from './settings.api';
+import { showToast } from '@/lib/swal';
 
 interface AddTeamMemberModalProps {
   open: boolean;
@@ -23,6 +24,7 @@ export function AddTeamMemberModal({ open, onClose }: AddTeamMemberModalProps) {
     mutationFn: createTeamMember,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['settings', 'team'] });
+      showToast('Team member added successfully', 'success');
       handleClose();
     },
     onError: (err: unknown) => {

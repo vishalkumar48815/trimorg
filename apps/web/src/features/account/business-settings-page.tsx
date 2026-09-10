@@ -19,6 +19,7 @@ import {
   type BusinessSettingsValues,
 } from '@/features/account/account.schemas';
 import { businessTypeOptions } from '@/features/onboarding/onboarding.schemas';
+import { showToast, showError } from '@/lib/swal';
 
 const ORGANIZATION_QUERY_KEY = ['account', 'organization'] as const;
 const TOAST_TIMEOUT_MS = 2800;
@@ -86,6 +87,11 @@ export function BusinessSettingsPage(): ReactElement {
     onSuccess: async (organization) => {
       queryClient.setQueryData(ORGANIZATION_QUERY_KEY, organization);
       setToastMessage('Business settings updated successfully.');
+      showToast('Business settings saved', 'success');
+    },
+    onError: (err: unknown) => {
+      const msg = err instanceof Error ? err.message : 'Failed to update business settings.';
+      showError('Save Failed', msg);
     },
   });
 
@@ -117,7 +123,7 @@ export function BusinessSettingsPage(): ReactElement {
 
   if (organizationQuery.isLoading) {
     return (
-      <PageContainer width="constrained">
+      <PageContainer width="full">
         <div className="space-y-4">
           <div className="h-8 w-56 animate-pulse rounded-full bg-muted" />
           <div className="h-96 w-full animate-pulse rounded-lg bg-muted/70" />
@@ -128,7 +134,7 @@ export function BusinessSettingsPage(): ReactElement {
 
   if (organizationQuery.isError) {
     return (
-      <PageContainer width="constrained">
+      <PageContainer width="full">
         <SectionCard
           title="Unable to load business settings"
           description={getErrorMessage(organizationQuery.error)}
@@ -154,7 +160,7 @@ export function BusinessSettingsPage(): ReactElement {
   }
 
   return (
-    <PageContainer width="constrained">
+    <PageContainer width="full">
       <div className="flex flex-col gap-6">
         {toastMessage ? <AccountToast message={toastMessage} /> : null}
 

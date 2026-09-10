@@ -94,8 +94,8 @@ export function SupplierDrawer({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:max-w-lg p-0 flex flex-col h-full bg-surface-primary">
-        <SheetHeader className="p-6 border-b border-border bg-surface-secondary/50">
+      <SheetContent side="right" className="w-full sm:max-w-lg p-0 flex flex-col h-full bg-card">
+        <SheetHeader className="p-6 border-b border-border bg-muted/20">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
               <Truck className="size-5" />
@@ -111,7 +111,7 @@ export function SupplierDrawer({
           </div>
         </SheetHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex-1 overflow-y-auto p-6 space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex-1 overflow-y-auto p-6 space-y-4 bg-card">
           {mutation.isError && (
             <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm flex items-start gap-3">
               <AlertTriangle className="size-5 shrink-0 mt-0.5" />

@@ -210,6 +210,45 @@ export function getPageFaqs(preferredCategory?: FAQItem['category'], seed = 0): 
 export type Currency = 'INR' | 'USD';
 export type BillingInterval = 'monthly' | 'yearly';
 
+/**
+ * Automatically detects whether the user is in India or International based on:
+ * 1. Browser timezone (e.g. Asia/Kolkata, Asia/Calcutta)
+ * 2. Navigator languages/locale (e.g. en-IN, hi, mr, ta, te, etc.)
+ * 3. Saved localStorage override if previously selected
+ */
+export function detectUserCurrency(): Currency {
+  if (typeof window === 'undefined') return 'INR';
+
+  // 1. Check if user explicitly chose a currency previously
+  try {
+    const saved = localStorage.getItem('trimorg_currency');
+    if (saved === 'INR' || saved === 'USD') return saved;
+  } catch {
+    // Ignore storage errors
+  }
+
+  // 2. Check timezone
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    if (tz.includes('Kolkata') || tz.includes('Calcutta') || tz === 'Asia/Colombo') {
+      return 'INR';
+    }
+  } catch {
+    // Ignore timezone errors
+  }
+
+  // 3. Check browser locale
+  const lang = (navigator.language || '').toLowerCase();
+  const languages = (navigator.languages || []).map((l) => l.toLowerCase());
+  const indianLocales = ['en-in', 'hi', 'hi-in', 'bn', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'pa'];
+  
+  const isIndianLocale =
+    indianLocales.some((loc) => lang.startsWith(loc)) ||
+    languages.some((l) => indianLocales.some((loc) => l.startsWith(loc)));
+
+  return isIndianLocale ? 'INR' : 'USD';
+}
+
 export interface PlanPricing {
   monthly: number;
   yearly: number; // price per month when billed yearly

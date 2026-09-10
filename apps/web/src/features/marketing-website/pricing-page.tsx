@@ -9,12 +9,13 @@ import { PageReveal } from '@/features/marketing-website/page-reveal';
 import {
   getPageFaqs,
   PRICING_PLANS,
+  detectUserCurrency,
   type Currency,
   type BillingInterval,
 } from '@/features/marketing-website/public-site.data';
 
 export function PricingPage(): ReactElement {
-  const [currency, setCurrency] = useState<Currency>('INR');
+  const [currency] = useState<Currency>(() => detectUserCurrency());
   const [interval, setInterval] = useState<BillingInterval>('yearly');
   const pageFaqs = useMemo(() => getPageFaqs('billing', 101), []);
 
@@ -33,35 +34,8 @@ export function PricingPage(): ReactElement {
             Choose the plan that fits your business scale. All plans include a 14-day risk-free trial.
           </p>
 
-          {/* Controls: Currency & Billing Interval Toggles */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-            {/* Currency Selector */}
-            <div className="inline-flex rounded-xl p-1 bg-muted/60 border border-border shadow-inner">
-              <button
-                type="button"
-                onClick={() => setCurrency('INR')}
-                className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  currency === 'INR'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                🇮🇳 INR (₹)
-              </button>
-              <button
-                type="button"
-                onClick={() => setCurrency('USD')}
-                className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  currency === 'USD'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                🌐 USD ($)
-              </button>
-            </div>
-
-            {/* Monthly / Yearly Toggle */}
+          {/* Controls: Billing Interval Toggle (Monthly / Yearly) */}
+          <div className="pt-2 flex items-center justify-center">
             <div className="inline-flex items-center rounded-xl p-1 bg-muted/60 border border-border shadow-inner">
               <button
                 type="button"
